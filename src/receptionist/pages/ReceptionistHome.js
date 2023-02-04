@@ -30,43 +30,47 @@ function ReceptionistHome() {
   const [dateState, setDateState] = useState(new Date());
   // const [staffName, setStaffName] = useState('');
 
+  useEffect(() => {
+    const getPatients = async () => {
+      setIsLoading(true);
+      const page = 0;
+      const size = 20;
+      if (user) {
+        setAuthToken(user.token);
+      }
+      try {
+        const { data } = await getAllPatients(page, size);
+        setIsLoading(false);
+
+        if (data) {
+          setPatientsList(data.data);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        toast.error('an error occured');
+      }
+    };
+    getPatients();
+  }, []);
+
   const filterData = (query, patientsList) => {
-    let terms = query.split(" ");
-    return patientsList.filter(object =>
-      terms.every(term =>
-        Object.values(object).some(value =>
+    let terms = query.split(' ');
+
+    return patientsList.filter((object) =>
+      terms.every((term) =>
+        Object.values(object).some((value) =>
           String(value).toLowerCase().includes(term.toLowerCase())
         )
       )
-     );
+    );
   };
 
   const getAvailableDoctors = (allStaff) => {
-    const allDoctors = allStaff.rows.filter(
+    const allDoctors = allStaff.data.filter(
       // TODO this filter should have a condition to also return doctors with available property set to true
-      (staff) => staff.role === 'DOCTOR'
+      (staff) => staff.role.toUpperCase() === 'DOCTOR'
     );
     setDoctorsList([...allDoctors]);
-    console.log(doctorsList);
-  };
-
-  const getPatients = async () => {
-    setIsLoading(true);
-    const page = 0;
-    const size = 20;
-    if (user) {
-      setAuthToken(user.token);
-    }
-    try {
-      const { data } = await getAllPatients(page, size);
-      setIsLoading(false);
-      if (data) {
-        setPatientsList(data.rows);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      toast.error('an error occured');
-    }
   };
 
   const dataFiltered = filterData(searchQuery, patientsList);
@@ -88,7 +92,6 @@ function ReceptionistHome() {
   };
 
   useEffect(() => {
-    getPatients();
     getAllDoctors();
   }, []);
 
@@ -105,7 +108,7 @@ function ReceptionistHome() {
             <List>
               <ListItem>
                 <ListItemText
-                  primary={<Typography variant="h6">Receptionist {user.user.fullName}</Typography>}
+                  primary={<Typography variant="h6">Receptionist {user.fullName}</Typography>}
                 />
               </ListItem>
               <ListItem>

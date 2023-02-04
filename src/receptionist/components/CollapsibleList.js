@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+// import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import List from '@mui/material/List';
@@ -31,6 +32,7 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
   };
 
   const doctorNames = doctorsList.map((doctor) => doctor.fullName);
+
   // eslint-disable-next-line no-unused-vars
   const arr = () => doctorNames.map((i) => false);
 
@@ -46,6 +48,7 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
     event.preventDefault();
     setIsSending(true);
     const doctor = getSelectedDoctorInfo(staffName, doctorsList);
+    console.log(doctor);
     const toStaffId = doctor.uuid;
     const requestData = { patientId, toStaffId };
     console.log(requestData);

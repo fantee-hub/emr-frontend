@@ -43,23 +43,25 @@ function DoctorHome() {
   );
 
   const filterData = (query, patientsList) => {
-    let terms = query.split(" ");
-    return patientsList.filter(object =>
-      terms.every(term =>
-        Object.values(object.Patient).some(value =>
+    let terms = query.split(' ');
+    return patientsList.filter((object) =>
+      terms.every((term) =>
+        Object.values(object.Patient).some((value) =>
           String(value).toLowerCase().includes(term.toLowerCase())
         )
       )
-     );
+    );
   };
 
   const patientsFromReceptionist = async () => {
-    const staffId = user.user.uuid;
+    const staffId = user.uuid;
+    console.log(user);
     if (user) {
       setAuthToken(user.token);
     }
     try {
       const { data } = await getReceivedQueues(staffId, 'PENDING');
+      console.log(data);
       const patients = data.rows;
       if (data) {
         setPatientsList(patients);
@@ -74,14 +76,14 @@ function DoctorHome() {
     if (event.target.checked) {
       setIsDoctorAvailable(true);
       if (availableDoctors.length > 0) {
-        setAvailableDoctors(availableDoctors.push(user.user.fullName));
+        setAvailableDoctors(availableDoctors.push(user.data.fullName));
       } else if (availableDoctors.length === 0) {
         setAvailableDoctors([user.user.fullName]);
       }
     }
     if (!event.target.checked) {
       setIsDoctorAvailable(false);
-      setAvailableDoctors(availableDoctors.filter((doc) => doc !== user.user.fullName));
+      setAvailableDoctors(availableDoctors.filter((doc) => doc !== user.data.fullName));
     }
   };
   const dataFiltered = filterData(searchQuery, patientsList);
@@ -104,7 +106,7 @@ function DoctorHome() {
           <div>
             <div className="flex space-x-2">
               <FaUserMd className="mt-5" />
-              <h2 className="text-xl">Dr. {user.user.fullName} </h2>
+              <h2 className="text-xl">Dr. {user.data.fullName} </h2>
             </div>
             <div className="flex space-x-2 mt-[-2px]">
               <Checkbox size="small" checked={isDoctorAvailable} onChange={handleCheckboxChange} />
@@ -156,8 +158,7 @@ function DoctorHome() {
                           component={Link}
                           to={`/patient/${data.Patient.uuid}/${data.Patient.name}/${data.session.id}/${data.Patient.id}`}
                           style={{ textDecoration: 'none' }}
-                          className="hover:shadow-md hover:bg-slate-50"
-                        >
+                          className="hover:shadow-md hover:bg-slate-50">
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell align="center">{data.Patient.id}</TableCell>
                           <TableCell align="center">{data.Patient.name}</TableCell>
