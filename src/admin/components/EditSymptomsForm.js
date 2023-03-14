@@ -5,20 +5,20 @@ import setAuthToken from '../../utils/setAuthToken';
 import { updateSymptomItem } from '../../utils/api';
 import EditForm from './EditForm';
 
-export default function EditSymptomForm({ selectedItem, setRows, rows, user }) {
+export default function EditSymptomForm({ selectedItem, setRows, rows, getSymptom, user }) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [inputData, setInputData] = useState({
-    name: selectedItem.name,
-    id: selectedItem.id
+    title: selectedItem.title,
+    id: selectedItem._id
   });
-  const { name, id } = inputData;
+  const { title, id } = inputData;
   const handleChange = (e) => {
     setInputData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value
+      title: e.target.value
     }));
   };
 
@@ -44,11 +44,14 @@ export default function EditSymptomForm({ selectedItem, setRows, rows, user }) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await updateSymptomItem(inputData);
+      const { data } = await updateSymptomItem(inputData, id);
+      console.log(data);
       updatedSymptomList(id, inputData);
+      // console.log(rows);
       setIsLoading(false);
       setOpen(false);
-      toast.success(data.message);
+      getSymptom();
+      toast.success(data.data.message);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.message);
@@ -56,10 +59,10 @@ export default function EditSymptomForm({ selectedItem, setRows, rows, user }) {
   };
   const formDetails = [
     {
-      name: 'name',
-      id: 'name',
+      name: 'title',
+      id: 'title',
       label: 'Symptom',
-      defaultValue: name
+      defaultValue: title
     }
   ];
 

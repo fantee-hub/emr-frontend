@@ -14,7 +14,7 @@ import InputDetailsForm from '../components/InputDetailsForm';
 import useForm from '../../utils/formValidations/useForm';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
-import { addToDiagnosisList, getDiagnosisList } from '../../utils/api';
+import { addNewDiagnosis, getDiagnosisList } from '../../utils/api';
 import EditDiagnosisForm from '../components/EditDiagnosisForm';
 
 const useStyles = makeStyles({
@@ -55,12 +55,12 @@ function Diagnosis() {
 
   const addDiagnosis = async () => {
     setIsAddingDiagnosis(true);
-    const requestData = { name };
+    const requestData = { title, description };
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      await addToDiagnosisList(requestData);
+      await addNewDiagnosis(requestData);
       setIsAddingDiagnosis(false);
       toast.success('Diagnosis added successfully');
       // if (rows.length) {
@@ -85,7 +85,7 @@ function Diagnosis() {
       setIsLoading(false);
       if (data) {
         console.log(data);
-        setRows(data);
+        setRows(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -99,12 +99,17 @@ function Diagnosis() {
   }, []);
   const { handleChange, values, errors, handleSubmit } = useForm(addDiagnosis);
 
-  const { name } = values;
+  const { title, description } = values;
   const formInputDetails = [
     {
-      name: 'name',
-      id: 'name',
+      name: 'title',
+      id: 'title',
       label: 'Diagnosis'
+    },
+    {
+      name: 'description',
+      id: 'description',
+      label: 'Description'
     }
   ];
   return (
@@ -146,13 +151,14 @@ function Diagnosis() {
               {rows.map((row, index) => (
                 <TableRow key={index} className="odd:bg-white even:bg-slate-50">
                   <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.title}</TableCell>
                   <TableCell align="center">
                     <EditDiagnosisForm
                       selectedItem={row}
                       setRows={setRows}
                       rows={rows}
                       user={user}
+                      getDiagnosis={getDiagnosis}
                     />
                   </TableCell>
                   <TableCell align="center">

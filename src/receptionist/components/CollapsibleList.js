@@ -47,17 +47,20 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
   const handleSendToDoctor = async (event, patientId) => {
     event.preventDefault();
     setIsSending(true);
-    const doctor = getSelectedDoctorInfo(staffName, doctorsList);
-    console.log(doctor);
-    const toStaffId = doctor.uuid;
-    const requestData = { patientId, toStaffId };
+    const doctorList = getSelectedDoctorInfo(staffName, doctorsList);
+
+    const patient = patientId;
+    const doctor = doctorList.staff_id;
+    const requestData = { patient, doctor };
+
     console.log(requestData);
     if (user) {
       setAuthToken(user.token);
     }
 
     try {
-      await sendQueue(requestData);
+      const { data } = await sendQueue(requestData);
+      console.log(data);
       setIsSending(false);
       toast.success('Patient succesfully sent to doctor');
     } catch (error) {
@@ -68,7 +71,7 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
   const dob = new Date(patient.dob).toDateString();
 
   return (
-    <form onSubmit={() => handleSendToDoctor(event, patient.uuid)}>
+    <form onSubmit={() => handleSendToDoctor(event, patient.patient_id)}>
       <ListItem button key={patient.id} onClick={handleClick}>
         <ListItemText primary={<Typography variant="h5">{patient.name}</Typography>} />
         {open ? <ExpandLess /> : <ExpandMore />}

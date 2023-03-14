@@ -14,7 +14,7 @@ import InputDetailsForm from '../components/InputDetailsForm';
 import useForm from '../../utils/formValidations/useForm';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
-import { addToSymptomList, getSymptomsList } from '../../utils/api';
+import { addNewSymptom, getSymptomsList } from '../../utils/api';
 import EditSymptomForm from '../components/EditSymptomsForm';
 
 const useStyles = makeStyles({
@@ -62,12 +62,13 @@ function Symptoms() {
   };
   const addSymptom = async () => {
     setIsAddingSymptom(true);
-    const requestData = { name };
+    const requestData = { title, description };
     if (user) {
       setAuthToken(user.token);
     }
+    console.log(requestData);
     try {
-      await addToSymptomList(requestData);
+      await addNewSymptom(requestData);
       setIsAddingSymptom(false);
       toast.success('Symptom added successfully');
       // if (rows.length) {
@@ -93,7 +94,7 @@ function Symptoms() {
       setIsLoading(false);
       if (data) {
         console.log(data);
-        setRows(data);
+        setRows(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -107,12 +108,18 @@ function Symptoms() {
   }, []);
   const { handleChange, values, errors, handleSubmit } = useForm(addSymptom);
 
-  const { name } = values;
+  const { title, description } = values;
 
   const formInputDetails = [
     {
-      name: 'name',
+      name: 'title',
+      id: 'title',
       label: 'Symptom'
+    },
+    {
+      name: 'description',
+      id: 'description',
+      label: 'Description'
     }
   ];
   return (
@@ -154,9 +161,15 @@ function Symptoms() {
               {rows.map((row, index) => (
                 <TableRow key={index} className="odd:bg-white even:bg-slate-50">
                   <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.title}</TableCell>
                   <TableCell align="center">
-                    <EditSymptomForm selectedItem={row} setRows={setRows} rows={rows} user={user} />
+                    <EditSymptomForm
+                      selectedItem={row}
+                      setRows={setRows}
+                      rows={rows}
+                      user={user}
+                      getSymptom={getSymptoms}
+                    />
                   </TableCell>
                   <TableCell align="center">
                     <DeleteDialog id={row.id} setRows={setRows} role="symptoms" rows={rows} />
