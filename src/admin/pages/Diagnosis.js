@@ -162,7 +162,14 @@ function Diagnosis() {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    <DeleteDialog id={row.id} setRows={setRows} role="diagnosis" rows={rows} />
+                    <DeleteDialog
+                      id={row._id}
+                      setRows={setRows}
+                      role="diagnosis"
+                      rows={rows}
+                      item={row.title}
+                      getUpdatedList={() => getDiagnosis()}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
