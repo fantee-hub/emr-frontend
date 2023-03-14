@@ -34,6 +34,10 @@ export const setStaffShiftHours = (data) => {
   return httpService.put(StaffUrl + '/hours', data);
 };
 
+export const deleteStaff = (staff_id) => {
+  return httpService.delete(StaffUrl + '/' + staff_id);
+};
+
 export const sendQueue = (data) => {
   return httpService.post(sendQueueUrl, data);
 };
@@ -60,6 +64,10 @@ export const updatePatient = (data, patient_id) => {
   return httpService.put(PatientUrl + '/' + patient_id, data);
 };
 
+export const deletePatient = (patient_id) => {
+  return httpService.delete(PatientUrl + '/' + patient_id);
+};
+
 export const addNewInventory = (data) => {
   return httpService.post(InventoryUrl, data);
 };
@@ -68,6 +76,10 @@ export const getAllInventoryItems = (page, size) => {
 };
 export const updateInventory = (id, data) => {
   return httpService.patch(InventoryUrl + '/' + id, data);
+};
+
+export const deleteInventory = (inventory_id) => {
+  return httpService.delete(InventoryUrl + '/' + inventory_id);
 };
 
 export const addPrescription = (data) => {
@@ -113,6 +125,10 @@ export const getSessionDiagnosis = (sessionId) => {
   return httpService.get(DiagnosisUrl + '/session/' + sessionId);
 };
 
+export const deleteDiagnosis = (id) => {
+  return httpService.delete(DiagnosisUrl + '/' + id);
+};
+
 export const addToSymptomList = (data) => {
   return httpService.post(StaffUrl + SymptomsUrl, data);
 };
@@ -127,6 +143,10 @@ export const updateSymptomItem = (data, sypmtomId) => {
 };
 export const getSessionSymptoms = (sessionId) => {
   return httpService.get(SymptomsUrl + '/session/' + sessionId);
+};
+
+export const deleteSymptom = (symptom_id) => {
+  return httpService.delete(SymptomsUrl + '/' + symptom_id);
 };
 
 export const approvePayment = (data) => {
