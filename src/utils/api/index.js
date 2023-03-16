@@ -12,6 +12,7 @@ const TestsInSessionUrl = '/lab/session/';
 const LabUrl = '/lab';
 const DiagnosisUrl = '/diagnosis';
 const SymptomsUrl = '/symptom';
+const patientSymptom = '/symptoms';
 const ApprovePaymentUrl = '/approve';
 
 export const addNewStaff = (data) => {
@@ -129,8 +130,8 @@ export const deleteDiagnosis = (id) => {
   return httpService.delete(DiagnosisUrl + '/' + id);
 };
 
-export const addToSymptomList = (data) => {
-  return httpService.post(StaffUrl + SymptomsUrl, data);
+export const addPatientSymptom = (data) => {
+  return httpService.post(patientSymptom, data);
 };
 export const addNewSymptom = (data) => {
   return httpService.post(SymptomsUrl, data);
