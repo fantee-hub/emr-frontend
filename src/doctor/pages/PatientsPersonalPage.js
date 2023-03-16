@@ -17,7 +17,7 @@ const TabPanel = (props) => {
   );
 };
 function PatientsPersonalPage() {
-  let { patientId, name, sessionId, id } = useParams();
+  let { patientId, name, sessionId } = useParams();
 
   const [currentTab, setCurrentTab] = React.useState(0);
 
@@ -60,7 +60,7 @@ function PatientsPersonalPage() {
           </div>
         </section>
         <TabPanel current={currentTab} index={0}>
-          <PatientInfo patientId={id} />
+          <PatientInfo patientId={patientId} />
         </TabPanel>
         <TabPanel current={currentTab} index={1}>
           <DrugsTestDiagnosis />

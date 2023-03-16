@@ -30,8 +30,9 @@ function DrugsTestDiagnosis() {
     try {
       const { data } = await getAllInventoryItems(page, size);
       if (data) {
-        const drugs = data.rows.filter((item) => item.type === 'DRUG');
-        const tests = data.rows.filter((item) => item.type === 'TEST');
+        const drugs = data?.data?.filter((item) => item.type === 'drug');
+        const tests = data.data.filter((item) => item.type === 'test');
+        console.log(drugs);
         setDrugsList(drugs);
         setTestsList(tests);
       }
@@ -39,6 +40,7 @@ function DrugsTestDiagnosis() {
       toast.error(error.message);
     }
   };
+
   const getSymptoms = async () => {
     if (user) {
       setAuthToken(user.token);

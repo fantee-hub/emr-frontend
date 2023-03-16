@@ -59,7 +59,8 @@ export default function DeleteDialog({ id, getUpdatedList, item, role }) {
       setIsLoading(false);
       setOpen(false);
       getUpdatedList();
-      toast.success(data.data.message);
+      console.log(data);
+      toast.success(data.data);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.message);

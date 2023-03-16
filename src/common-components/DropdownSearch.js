@@ -11,7 +11,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function DropdownSearch({ btnText, menuItems, handleCheckboxChange }) {
   if (!menuItems) return;
-  const items = menuItems.map((item) => item.name);
+  console.log(menuItems);
+  const items = !menuItems.data
+    ? menuItems.map((item) => item.name)
+    : menuItems.data.map((item) => item.title);
 
   return (
     <Autocomplete

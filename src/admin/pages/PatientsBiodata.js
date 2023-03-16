@@ -92,6 +92,7 @@ function PatientsBiodata() {
     }
     try {
       const { data } = await getAllPatients(page, size);
+      console.log(data.data);
       setIsLoading(false);
       if (data) {
         setRows(data.data);
@@ -182,8 +183,7 @@ function PatientsBiodata() {
                         <TableCell
                           align="center"
                           onClick={() => handlePatientNameClick(row.patient_id, row.name)}
-                          className="cursor-pointer hover:shadow-md underline decoration-orange-500"
-                        >
+                          className="cursor-pointer hover:shadow-md underline decoration-orange-500">
                           {row.name}
                         </TableCell>
                         <TableCell align="center">{row.email}</TableCell>

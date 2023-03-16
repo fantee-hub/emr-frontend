@@ -3,7 +3,7 @@ import httpService from '../axios';
 const StaffUrl = '/staff';
 const InventoryUrl = '/inventory';
 const PatientUrl = '/patients';
-const ReceivedQueuesUrl = '/queue/staff/received';
+const ReceivedQueuesUrl = '/queue/';
 const sendQueueUrl = '/queue';
 const PrescriptionUrl = '/prescription';
 const SessionUrl = '/session';
@@ -41,8 +41,8 @@ export const deleteStaff = (staff_id) => {
 export const sendQueue = (data) => {
   return httpService.post(sendQueueUrl, data);
 };
-export const getReceivedQueues = (staffId, status) => {
-  return httpService.get(ReceivedQueuesUrl, { params: { staffId, status } });
+export const getReceivedQueues = () => {
+  return httpService.get(ReceivedQueuesUrl);
 };
 
 export const addNewPatients = (data) => {

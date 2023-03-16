@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   }
 });
 
-const headers = ['Index', 'ID', 'Name', 'Email', 'Phone No', 'DOB'];
+const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB'];
 
 function DoctorHome() {
   const classes = useStyles();
@@ -46,7 +46,7 @@ function DoctorHome() {
     let terms = query.split(' ');
     return patientsList.filter((object) =>
       terms.every((term) =>
-        Object.values(object.Patient).some((value) =>
+        Object.values(object.patient).some((value) =>
           String(value).toLowerCase().includes(term.toLowerCase())
         )
       )
@@ -54,15 +54,15 @@ function DoctorHome() {
   };
 
   const patientsFromReceptionist = async () => {
-    const staffId = user.uuid;
-    console.log(user);
+    // const staffId = user.uuid;
+    // console.log(user);
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getReceivedQueues(staffId, 'PENDING');
-      console.log(data);
-      const patients = data.rows;
+      const { data } = await getReceivedQueues();
+      console.log(data.data);
+      const patients = data.data;
       if (data) {
         setPatientsList(patients);
       }
@@ -151,19 +151,19 @@ function DoctorHome() {
                 <TableBody>
                   {dataFiltered &&
                     dataFiltered.map((data, index) => {
-                      const dob = new Date(data.Patient.dob).toDateString();
+                      const dob = new Date(data.patient.dob).toDateString();
                       return (
                         <TableRow
                           key={index}
                           component={Link}
-                          to={`/patient/${data.Patient.uuid}/${data.Patient.name}/${data.session.id}/${data.Patient.id}`}
+                          to={`/patient/${data.patient._id}/${data.patient.name}`}
                           style={{ textDecoration: 'none' }}
                           className="hover:shadow-md hover:bg-slate-50">
                           <TableCell align="center">{index + 1}</TableCell>
-                          <TableCell align="center">{data.Patient.id}</TableCell>
-                          <TableCell align="center">{data.Patient.name}</TableCell>
-                          <TableCell align="center">{data.Patient.email}</TableCell>
-                          <TableCell align="center">{data.Patient.phoneNumber}</TableCell>
+
+                          <TableCell align="center">{data.patient.name}</TableCell>
+                          <TableCell align="center">{data.patient.email}</TableCell>
+                          <TableCell align="center">{data.patient.phoneNumber}</TableCell>
                           <TableCell align="center">{dob}</TableCell>
                         </TableRow>
                       );
