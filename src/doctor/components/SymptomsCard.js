@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import DropdownSearch from '../../common-components/DropdownSearch';
 import setAuthToken from '../../utils/setAuthToken';
-import { addNewSymptom } from '../../utils/api';
+import { addPatientSymptom } from '../../utils/api';
 import TransformButton from '../../common-components/TransformButton';
 import { useCurrentUser } from '../../utils/hooks';
 
@@ -26,8 +26,9 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }
     }
     try {
       const title = symptom;
-      const requestBody = { description, sessionId, patientId, title };
-      await addNewSymptom(requestBody);
+      const patient = patientId;
+      const requestBody = { description, sessionId, patient, title };
+      await addPatientSymptom(requestBody);
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -78,6 +79,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
       setChoice([...filterdArr]);
     }
   };
+  console.log(choice);
 
   return (
     <Paper sx={{ flexGrow: 1 }} className="p-3">

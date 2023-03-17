@@ -62,7 +62,7 @@ function DoctorHome() {
     try {
       const { data } = await getReceivedQueues();
       console.log(data.data);
-      const patients = data.data;
+      const patients = data.data.filter((patient) => patient.patient !== null);
       if (data) {
         setPatientsList(patients);
       }
