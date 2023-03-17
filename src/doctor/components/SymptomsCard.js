@@ -10,11 +10,13 @@ import TransformButton from '../../common-components/TransformButton';
 import { useCurrentUser } from '../../utils/hooks';
 
 // eslint-disable-next-line no-unused-vars
-function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }) {
+function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, symptoms }) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
+  console.log(symptom, symptoms);
+  const symptomId = symptoms.data.filter((symp) => symp.title === symptom);
 
   const { description } = inputData;
 
@@ -25,10 +27,14 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }
       setAuthToken(user.token);
     }
     try {
-      const title = symptom;
+      // const title = symptom;
       const patient = patientId;
-      const requestBody = { description, sessionId, patient, title };
-      await addPatientSymptom(requestBody);
+      const note = description;
+      const symptom = symptomId._id;
+      const doctor = user.staff_id;
+      const requestBody = { symptom, note, patient, doctor, sessionId };
+      const { data } = await addPatientSymptom(requestBody);
+      console.log(data);
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -58,6 +64,7 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }
 
 export default function SymptomCard({ sessionId, patientId, symptomsList }) {
   const [choice, setChoice] = useState([]);
+  console.log(symptomsList);
   const [inputData, setInputData] = useState({
     title: '',
     description: ''
@@ -105,6 +112,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
                       inputData={inputData}
                       sessionId={sessionId}
                       patientId={patientId}
+                      symptoms={symptomsList}
                     />
                     {index === choice.length - 1 ? null : (
                       <Divider orientation="horizontal" variant="fullWidth" />

@@ -66,7 +66,7 @@ function App() {
           {/* doctor routes */}
           <Route element={<ProtectedRoutes allowedRole={DOCTOR_USER_ROLE} />}>
             <Route path="/doctor" element={<DoctorHome />} />
-            <Route path="/patient/:patientId/:name" element={<PatientsPersonalPage />} />
+            <Route path="/patient/:patientId/:name/:sessionId" element={<PatientsPersonalPage />} />
             <Route
               path="/prescription/:patientId/:name/:sessionId"
               element={<DrugsTestDiagnosis />}

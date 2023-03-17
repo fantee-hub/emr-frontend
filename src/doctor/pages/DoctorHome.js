@@ -156,7 +156,7 @@ function DoctorHome() {
                         <TableRow
                           key={index}
                           component={Link}
-                          to={`/patient/${data.patient._id}/${data.patient.name}`}
+                          to={`/patient/${data.patient._id}/${data.patient.name}/${data.session}`}
                           style={{ textDecoration: 'none' }}
                           className="hover:shadow-md hover:bg-slate-50">
                           <TableCell align="center">{index + 1}</TableCell>

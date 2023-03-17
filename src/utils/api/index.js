@@ -3,6 +3,7 @@ import httpService from '../axios';
 const StaffUrl = '/staff';
 const InventoryUrl = '/inventory';
 const PatientUrl = '/patients';
+const patient = '/patient';
 const ReceivedQueuesUrl = '/queue/';
 const sendQueueUrl = '/queue';
 const PrescriptionUrl = '/prescription';
@@ -131,7 +132,7 @@ export const deleteDiagnosis = (id) => {
 };
 
 export const addPatientSymptom = (data) => {
-  return httpService.post(patientSymptom, data);
+  return httpService.post(patient + patientSymptom, data);
 };
 export const addNewSymptom = (data) => {
   return httpService.post(SymptomsUrl, data);
