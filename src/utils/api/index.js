@@ -95,7 +95,7 @@ export const getSessionPrescriptions = (sessionId) => {
 };
 
 export const addNewTest = (data) => {
-  return httpService.post(LabUrl, data);
+  return httpService.post(LabUrl + '/create', data);
 };
 export const addLabTestResult = (data) => {
   return httpService.patch(LabUrl, data);

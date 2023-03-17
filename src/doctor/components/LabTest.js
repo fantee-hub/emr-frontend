@@ -11,7 +11,7 @@ import { useCurrentUser } from '../../utils/hooks';
 // const drugs = JSON.parse(localStorage.getItem('drugsList'));
 // const user = JSON.parse(localStorage.getItem('user'));
 
-function LabTestForm({ test, handleChange, inputData, sessionId, testsList }) {
+function LabTestForm({ test, handleChange, inputData, sessionId, patientId, testsList }) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,15 +27,18 @@ function LabTestForm({ test, handleChange, inputData, sessionId, testsList }) {
     event.preventDefault();
     setIsLoading(true);
     const title = test;
-    const testInfo = getSelectedTestInfo(test, testsList)
+    const testInfo = getSelectedTestInfo(test, testsList);
     console.log(testInfo);
-    const drugId = testInfo.id;
-    const requestBody = { description, sessionId, title, drugId };
+    // const drugId = testInfo.id;
+    const patient = patientId;
+    const sessionID = sessionId;
+    const requestBody = { patient, title, description, sessionID };
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      await addNewTest(requestBody);
+      const { data } = await addNewTest(requestBody);
+      console.log(data);
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -62,7 +65,7 @@ function LabTestForm({ test, handleChange, inputData, sessionId, testsList }) {
   );
 }
 
-function LabTest({ sessionId, testsList }) {
+function LabTest({ sessionId, testsList, patientId }) {
   const [testChoice, setTestChoice] = useState([]);
   const [testInputData, setTestInputData] = useState({
     title: '',
@@ -121,6 +124,7 @@ function LabTest({ sessionId, testsList }) {
                       handleChange={handleTestFormChange}
                       inputData={testInputData}
                       sessionId={sessionId}
+                      patientId={patientId}
                       testsList={testsList}
                     />
                     {index === testChoice.length - 1 ? null : (

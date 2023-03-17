@@ -101,7 +101,7 @@ function DrugsTestDiagnosis() {
               </div>
               <section className="flex flex-col space-y-3">
                 <Prescription drugsList={drugsList} sessionId={sessionId} patientId={patientId} />
-                <LabTest testsList={testsList} sessionId={sessionId} />
+                <LabTest testsList={testsList} sessionId={sessionId} patientId={patientId} />
               </section>
             </Paper>
           </div>
