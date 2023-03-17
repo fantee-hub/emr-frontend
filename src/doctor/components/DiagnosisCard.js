@@ -5,29 +5,43 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import DropdownSearch from '../../common-components/DropdownSearch';
 import setAuthToken from '../../utils/setAuthToken';
-import { addNewDiagnosis } from '../../utils/api';
+import { addPatientDiagnosis } from '../../utils/api';
 import TransformButton from '../../common-components/TransformButton';
 import { useCurrentUser } from '../../utils/hooks';
 
-function DiagnosisForm({ diagnosis, handleChange, inputData, sessionId, patientId }) {
+function DiagnosisForm({
+  diagnosis,
+  handleChange,
+  inputData,
+  sessionId,
+  patientId,
+  diagnosisList
+}) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const { description } = inputData;
 
+  const diagnosisId = diagnosisList.data.filter((diagnose) => diagnose.title === diagnosis);
+
   const onSubmitForm = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    const title = diagnosis;
+    // const title = diagnosis;
+    const note = description;
+    const diagnosis = diagnosisId._id;
+    const doctor = user.data.staff_id;
+    const sessionID = sessionId;
+    const patient = patientId;
 
-    const requestBody = { description, sessionId, patientId, title };
+    const requestBody = { note, diagnosis, sessionID, patient, doctor };
 
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      await addNewDiagnosis(requestBody);
+      await addPatientDiagnosis(requestBody);
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -108,6 +122,7 @@ function DiagnosisCard({ sessionId, patientId, diagnosisList }) {
                       inputData={inputData}
                       sessionId={sessionId}
                       patientId={patientId}
+                      diagnosisList={diagnosisList}
                     />
                     {index === choice.length - 1 ? null : (
                       <Divider orientation="horizontal" variant="fullWidth" />
