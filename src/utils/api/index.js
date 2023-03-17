@@ -117,6 +117,9 @@ export const addToDiagnosisList = (data) => {
 export const addNewDiagnosis = (data) => {
   return httpService.post(DiagnosisUrl, data);
 };
+export const addPatientDiagnosis = (data) => {
+  return httpService.post(patient + DiagnosisUrl, data);
+};
 export const getDiagnosisList = () => {
   return httpService.get(DiagnosisUrl);
 };
