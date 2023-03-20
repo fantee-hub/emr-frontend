@@ -30,7 +30,7 @@ function PatientHistory() {
       console.log(data);
       setIsPrescriptionLoading(false);
       if (data) {
-        setPrescription(data);
+        setPrescription(data.data);
       }
     } catch (error) {
       toast.error('an error occured');
