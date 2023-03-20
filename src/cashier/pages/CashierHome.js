@@ -14,7 +14,7 @@ function CashierHome() {
   const [doctors, setDoctors] = useState([]);
 
   const getAvailableDoctors = (allStaff) => {
-    const allDoctors = allStaff.rows.filter((staff) => staff.role === 'DOCTOR');
+    const allDoctors = allStaff.filter((staff) => staff.role === 'doctor');
     setDoctors([...allDoctors]);
     console.log(doctors);
   };
@@ -27,8 +27,9 @@ function CashierHome() {
     }
     try {
       const { data } = await getAllStaff(page, size);
+      console.log(data);
       if (data) {
-        getAvailableDoctors(data);
+        getAvailableDoctors(data.data);
       }
     } catch (error) {
       console.log(error);
@@ -48,7 +49,7 @@ function CashierHome() {
             </Avatar>
             <p className="text-xs">Cashier</p>
           </div>
-          <h2 className="text-xl"> {user.user.fullName}</h2>
+          <h2 className="text-xl"> {user.data.fullName}</h2>
         </div>
 
         <section>
@@ -58,7 +59,7 @@ function CashierHome() {
               {doctors.map((doctor, key) => {
                 return (
                   <li key={key}>
-                    <Link to={`/doctor/${doctor.uuid}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/doctor/${doctor.staff_id}`} style={{ textDecoration: 'none' }}>
                       Dr. {doctor.fullName}
                     </Link>
                   </li>

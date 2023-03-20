@@ -8,7 +8,7 @@ const ReceivedQueuesUrl = '/queue/';
 const sendQueueUrl = '/queue';
 const PrescriptionUrl = '/prescriptions';
 const SessionUrl = '/session';
-const PrescriptionInSessionUrl = '/prescription/session/';
+// const PrescriptionInSessionUrl = '/prescriptions/session/';
 const TestsInSessionUrl = '/lab/session/';
 const LabUrl = '/lab';
 const DiagnosisUrl = '/diagnosis';
@@ -91,7 +91,9 @@ export const updatePrescription = (data) => {
   return httpService.patch(PrescriptionUrl, data);
 };
 export const getSessionPrescriptions = (sessionId) => {
-  return httpService.get(PrescriptionInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
+  return httpService.get(PrescriptionUrl + '/session/' + sessionId, {
+    params: { page: 0, size: 10 }
+  });
 };
 
 export const addNewTest = (data) => {
@@ -107,8 +109,8 @@ export const getSessionTests = (sessionId) => {
 export const getSessions = (page, size) => {
   return httpService.get(SessionUrl, { params: { page, size } });
 };
-export const getAllSessionsForPatient = (patientId) => {
-  return httpService.get(SessionUrl + '/' + patientId, { params: { page: 0, size: 5 } });
+export const getAllSessionsForPatient = () => {
+  return httpService.get(SessionUrl);
 };
 
 export const addToDiagnosisList = (data) => {
@@ -127,7 +129,7 @@ export const updateDiagnosisItem = (data, diagnosisId) => {
   return httpService.patch(DiagnosisUrl + '/' + diagnosisId, data);
 };
 export const getSessionDiagnosis = (sessionId) => {
-  return httpService.get(DiagnosisUrl + '/session/' + sessionId);
+  return httpService.get(patient + DiagnosisUrl + '/session/' + sessionId);
 };
 
 export const deleteDiagnosis = (id) => {
@@ -146,8 +148,8 @@ export const getSymptomsList = () => {
 export const updateSymptomItem = (data, sypmtomId) => {
   return httpService.patch(SymptomsUrl + '/' + sypmtomId, data);
 };
-export const getSessionSymptoms = (sessionId) => {
-  return httpService.get(SymptomsUrl + '/session/' + sessionId);
+export const getSessionSymptoms = (sessionId,data) => {
+  return httpService.get(patient + patientSymptom + '/session/' + sessionId,data);
 };
 
 export const deleteSymptom = (symptom_id) => {
