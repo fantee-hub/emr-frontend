@@ -5,9 +5,9 @@ import { Divider, Grid, CircularProgress } from '@material-ui/core';
 import React from 'react';
 
 function TestHistory({ tests, isLoading }) {
-  const { LabTests, createdAt } = tests;
-  const date = !tests ? 'N/A' : new Date(createdAt).toDateString();
-  const sessionStatus = !tests ? 'N/A' : status;
+  // const { LabTests, createdAt } = tests;
+  const date = tests && tests.lab ? new Date(tests.session.createdAt).toDateString() : 'N/A';
+  const sessionStatus = tests && tests.lab ? tests.session.status : 'N/A';
 
   return (
     <div className="p-10">
@@ -40,14 +40,16 @@ function TestHistory({ tests, isLoading }) {
       <div className="grid-body">
         {isLoading ? (
           <CircularProgress size={30} />
-        ) : LabTests && !LabTests.length ? (
+        ) : !tests ? (
           <p className="text-xl font-bold pl-3 mb-3 text-red-500">
             There are no tests for this session
           </p>
         ) : (
-          LabTests &&
-          LabTests.map((item, index) => {
-            const { title, description, result, resultDescription, doctor } = item;
+          tests &&
+          tests.lab &&
+          tests.lab.length &&
+          tests.lab.map((item, index) => {
+            const { title, description } = item;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
@@ -60,7 +62,7 @@ function TestHistory({ tests, isLoading }) {
                   <Grid item xs={2}>
                     {description}
                   </Grid>
-                  <Grid item xs={2}>
+                  {/* <Grid item xs={2}>
                     {result}
                   </Grid>
                   <Grid item xs={4}>
@@ -68,9 +70,9 @@ function TestHistory({ tests, isLoading }) {
                   </Grid>
                   <Grid item xs={2} style={{ color: '#808080' }}>
                     {doctor.fullName}
-                  </Grid>
+                  </Grid> */}
                 </Grid>
-                {index !== LabTests.length - 1 ? (
+                {index !== tests.lab.length - 1 ? (
                   <Divider variant="fullWidth" orientation="horizontal" />
                 ) : null}
               </>
