@@ -5,6 +5,7 @@ import React from 'react';
 
 function PrescriptionHistory({ prescription, isLoading }) {
   // const { prescription, session } = prescription;
+  console.log(prescription.prescription);
   const date =
     prescription && prescription.prescription
       ? new Date(prescription.session.createdAt).toDateString()
@@ -42,12 +43,14 @@ function PrescriptionHistory({ prescription, isLoading }) {
       <div className="grid-body">
         {isLoading ? (
           <CircularProgress size={30} />
-        ) : prescription && !prescription.prescription.length ? (
+        ) : !prescription ? (
           <p className="text-xl font-bold pl-3 mb-3 text-red-500">
             There are no prescriptions for this session
           </p>
         ) : (
           prescription &&
+          prescription.prescription &&
+          prescription.prescription.length &&
           prescription.prescription.map((item, index) => {
             const { quantity, note, days, drugId } = item;
             return (

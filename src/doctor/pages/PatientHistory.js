@@ -43,9 +43,10 @@ function PatientHistory() {
     }
     try {
       const { data } = await getSessionTests(sessionId);
+      console.log(data);
       setIsTestLoading(false);
       if (data) {
-        setTests(data);
+        setTests(data.data);
       }
     } catch (error) {
       toast.error('an error occured');
