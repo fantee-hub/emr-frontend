@@ -63,11 +63,10 @@ function DoctorPatients() {
                 </p>
               ) : (
                 patientsList.map((data, key) => {
-                  const { session } = data;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/patient-invoice/${session}/${data._id}`}
+                        to={`/patient-invoice/${data.session}/${data._id}`}
                         style={{ textDecoration: 'none' }}>
                         {data.name}
                       </Link>

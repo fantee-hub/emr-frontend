@@ -47,7 +47,7 @@ function PatientInvoice() {
       prescription &&
       prescription
         .filter((item) => !item.paid)
-        .map((item) => item.quantity * item.drug.price)
+        .map((item) => item.quantity * item.drugId.price)
         .reduce((prev, curr) => prev + curr, 0)
     );
   };
@@ -68,7 +68,7 @@ function PatientInvoice() {
     try {
       const { data } = await getSessionPrescriptions(sessionId);
       if (data) {
-        setPrescription(data.Prescriptions);
+        setPrescription(data.data.prescription);
         console.log(data);
         const drugs = prescription.map((item) => item.drug);
         calcTotalPrescriptionAmount(drugs);
@@ -84,8 +84,9 @@ function PatientInvoice() {
     try {
       const { data } = await getSessionTests(sessionId);
       if (data) {
-        setTests(data.LabTests);
-        calcTotalTestsAmount(data.LabTests);
+        setTests(data.data.lab);
+        calcTotalTestsAmount(data.data.lab);
+        console.log(data);
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +111,7 @@ function PatientInvoice() {
             </Avatar>
             <p className="text-xs">Cashier</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section className="flex flex-col space-y-3">
           <Paper className="flex flex-col items-center flex-1 px-3">
@@ -135,18 +136,18 @@ function PatientInvoice() {
                     </tr>
                   ) : (
                     prescription
-                      .filter((item) => !item.paid && item.drug.type === "DRUG")
+                      .filter((item) => !item.paid && item.drugId.type === 'drug')
                       .map((item, index) => {
-                        const { drug, note, id, quantity, days } = item;
-                        const total = quantity * drug.price;
+                        const { drugId, note, quantity, days } = item;
+                        const total = quantity * drugId.price;
                         return (
-                          <TableRow key={id}>
+                          <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center">{drug.name}</TableCell>
+                            <TableCell align="center">{drugId.name}</TableCell>
                             <TableCell align="center">{quantity}</TableCell>
                             <TableCell align="center">{days} days</TableCell>
                             <TableCell align="center">
-                              <span>&#8358;</span> {drug.price}
+                              <span>&#8358;</span> {drugId.price}
                             </TableCell>
                             <TableCell align="center">{note}</TableCell>
                             <TableCell align="center">
@@ -187,9 +188,9 @@ function PatientInvoice() {
                     tests
                       .filter((test) => !test.paid)
                       .map((test, index) => {
-                        const { title, description, id, price } = test;
+                        const { title, description, price } = test;
                         return (
-                          <TableRow key={id}>
+                          <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
                             <TableCell align="center">{title}</TableCell>
                             <TableCell align="center">{description}</TableCell>
