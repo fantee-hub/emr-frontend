@@ -15,6 +15,7 @@ const DiagnosisUrl = '/diagnosis';
 const SymptomsUrl = '/symptom';
 const patientSymptom = '/symptoms';
 const ApprovePaymentUrl = '/approve';
+const cashier = '/cashier';
 
 export const addNewStaff = (data) => {
   return httpService.post(StaffUrl, data);
@@ -148,8 +149,8 @@ export const getSymptomsList = () => {
 export const updateSymptomItem = (data, sypmtomId) => {
   return httpService.patch(SymptomsUrl + '/' + sypmtomId, data);
 };
-export const getSessionSymptoms = (sessionId,data) => {
-  return httpService.get(patient + patientSymptom + '/session/' + sessionId,data);
+export const getSessionSymptoms = (sessionId, data) => {
+  return httpService.get(patient + patientSymptom + '/session/' + sessionId, data);
 };
 
 export const deleteSymptom = (symptom_id) => {
@@ -168,4 +169,8 @@ export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
 
 export const StaffInvoiceApproval = (data) => {
   return httpService.put(ApprovePaymentUrl + '/confirm', data);
+};
+
+export const getDoctorPatient = () => {
+  return httpService.get(cashier + '/list');
 };
