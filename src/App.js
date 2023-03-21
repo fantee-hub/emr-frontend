@@ -66,10 +66,7 @@ function App() {
           {/* doctor routes */}
           <Route element={<ProtectedRoutes allowedRole={DOCTOR_USER_ROLE} />}>
             <Route path="/doctor" element={<DoctorHome />} />
-            <Route
-              path="/patient/:patientId/:name/:sessionId/:id"
-              element={<PatientsPersonalPage />}
-            />
+            <Route path="/patient/:patientId/:name/:sessionId" element={<PatientsPersonalPage />} />
             <Route
               path="/prescription/:patientId/:name/:sessionId"
               element={<DrugsTestDiagnosis />}
@@ -88,7 +85,10 @@ function App() {
           {/* pharmacist routes */}
           <Route element={<ProtectedRoutes allowedRole={PHARMACIST_USER_ROLE} />}>
             <Route path="/pharmacist" element={<PharmacistHome />} />
-            <Route path="/approved-invoice/:patientId/:sessionId/:paymentId" element={<PharmacistInvoice />} />
+            <Route
+              path="/approved-invoice/:patientId/:sessionId/:paymentId"
+              element={<PharmacistInvoice />}
+            />
           </Route>
 
           {/* lab routes */}

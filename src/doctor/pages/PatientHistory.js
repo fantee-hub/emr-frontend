@@ -13,7 +13,7 @@ import DiagnosisHistory from '../components/DiagnosisHistory';
 const user = JSON.parse(localStorage.getItem('user'));
 
 function PatientHistory() {
-  let { sessionId } = useParams();
+  let { sessionId, patientId } = useParams();
 
   const [isPrescritionLoading, setIsPrescriptionLoading] = useState(false);
   const [isTestLoading, setIsTestLoading] = useState(false);
@@ -27,9 +27,10 @@ function PatientHistory() {
     }
     try {
       const { data } = await getSessionPrescriptions(sessionId);
+      console.log(data);
       setIsPrescriptionLoading(false);
       if (data) {
-        setPrescription(data);
+        setPrescription(data.data);
       }
     } catch (error) {
       toast.error('an error occured');
@@ -42,9 +43,10 @@ function PatientHistory() {
     }
     try {
       const { data } = await getSessionTests(sessionId);
+      console.log(data);
       setIsTestLoading(false);
       if (data) {
-        setTests(data);
+        setTests(data.data);
       }
     } catch (error) {
       toast.error('an error occured');
@@ -61,7 +63,7 @@ function PatientHistory() {
       <div className="px-10 pb-8">
         <h1 className="">Patient History</h1>
         <Paper>
-          <SymptomsHistory user={user} sessionId={sessionId} />
+          <SymptomsHistory user={user} sessionId={sessionId} patientId={patientId} />
           <DiagnosisHistory user={user} sessionId={sessionId} />
           <PrescriptionHistory isLoading={isPrescritionLoading} prescription={prescription} />
           <TestHistory isLoading={isTestLoading} tests={tests} />

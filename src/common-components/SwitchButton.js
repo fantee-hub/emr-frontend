@@ -7,7 +7,7 @@ import { getSingleStaff, updateStaffStatus } from '../utils/api';
 import setAuthToken from '../utils/setAuthToken';
 import './../styles/SwitchButton.css';
 
-function SwitchButton({ id, user }) {
+function SwitchButton({ id, user, row }) {
   const [isLoading, setIsLoading] = useState(false);
   const [staffStatus, setStaffStatus] = useState(null);
 
@@ -20,7 +20,7 @@ function SwitchButton({ id, user }) {
       const staff_id = id;
       const { data } = await getSingleStaff(staff_id);
       setIsLoading(false);
-
+      console.log(data);
       if (data) {
         setStaffStatus(data.data.status);
       }
@@ -37,9 +37,10 @@ function SwitchButton({ id, user }) {
     }
     try {
       const staff_id = id;
-      // const status = event.target.checked ? 'TRUE' : 'FALSE';
-      const { data } = await updateStaffStatus(staff_id);
-      toast.success(data.message);
+      const status = event.target.checked ? 'true' : 'false';
+      const { data } = await updateStaffStatus(staff_id, status);
+
+      toast.success(data.data.message);
       getStaffStatus();
     } catch (error) {
       console.log(error);

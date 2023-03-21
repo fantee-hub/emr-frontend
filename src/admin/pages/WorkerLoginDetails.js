@@ -64,7 +64,8 @@ function WorkerLoginDetails() {
   };
   const addStaff = async () => {
     setIsAddingStaff(true);
-    const staffFormData = { fullName, username, password, role};
+    const staffFormData = { fullName, username, password, role };
+    console.log(staffFormData);
     if (user) {
       setAuthToken(user.token);
     }
@@ -91,7 +92,7 @@ function WorkerLoginDetails() {
       setIsLoading(false);
       if (data) {
         if (data.message) {
-          toast.error(data.message)
+          toast.error(data.message);
         }
         setRows(data.data);
       }
@@ -99,7 +100,6 @@ function WorkerLoginDetails() {
       console.log(error);
     } finally {
       setIsLoading(false);
-
     }
   };
 
@@ -214,7 +214,12 @@ function WorkerLoginDetails() {
                         />
                       </TableCell>
                       <TableCell align="center">
-                        <DeleteDialog id={row.staff_id} getUpdatedList={() => getStaff()} item={row.fullName} role="staff" />
+                        <DeleteDialog
+                          id={row.staff_id}
+                          getUpdatedList={() => getStaff()}
+                          item={row.fullName}
+                          role="staff"
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

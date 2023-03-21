@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { CircularProgress, Divider, Grid } from '@material-ui/core';
-import { Circle } from '@mui/icons-material';
+// import { Circle } from '@mui/icons-material';
 import { FaDiagnoses } from 'react-icons/fa';
 
 import React, { useEffect, useState } from 'react';
@@ -21,7 +21,9 @@ function DiagnosisHistory({ user, sessionId }) {
     try {
       const { data } = await getSessionDiagnosis(sessionId);
       setIsLoading(false);
-      setDiagnosis(data);
+      if (data) {
+        setDiagnosis(data.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,9 +39,14 @@ function DiagnosisHistory({ user, sessionId }) {
       </div>
       <p className="font-semibold">
         {' '}
-        Date: {!diagnosis ? 'N/A' : new Date(diagnosis.createdAt).toDateString()}
+        Date:{' '}
+        {diagnosis && diagnosis.diagnosis
+          ? new Date(diagnosis.session.createdAt).toDateString()
+          : 'N/A'}
       </p>
-      <p className="font-semibold">Status: {!diagnosis ? 'N/A' : diagnosis.status}</p>
+      <p className="font-semibold">
+        Status: {diagnosis && diagnosis.diagnosis ? diagnosis.session.status : 'N/A'}
+      </p>
       <div className="grid-header">
         <Grid container spacing={2} style={{ fontWeight: 'bold' }}>
           <Grid item xs={6}>
@@ -60,24 +67,23 @@ function DiagnosisHistory({ user, sessionId }) {
           </p>
         ) : (
           diagnosis &&
-          diagnosis.PatientDiagnoses &&
-          diagnosis.PatientDiagnoses.length &&
-          diagnosis.PatientDiagnoses.map((item, index) => {
-            const { title, description } = item;
+          diagnosis.diagnosis &&
+          diagnosis.diagnosis.map((item, index) => {
+            const { note } = item;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
-                  <Grid item xs={6}>
+                  {/* <Grid item xs={6}>
                     <div className="flex flex-row items-center">
                       <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
                       {title}
                     </div>
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6}>
-                    {description}
+                    {note}
                   </Grid>
                 </Grid>
-                {index !== diagnosis.PatientDiagnoses.length - 1 ? (
+                {index !== diagnosis.diagnosis.length - 1 ? (
                   <Divider variant="fullWidth" orientation="horizontal" />
                 ) : null}
               </>

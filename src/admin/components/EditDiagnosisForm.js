@@ -5,20 +5,20 @@ import setAuthToken from '../../utils/setAuthToken';
 import { updateDiagnosisItem } from '../../utils/api';
 import EditForm from './EditForm';
 
-export default function EditDiagnosisForm({ selectedItem, setRows, rows, user }) {
+export default function EditDiagnosisForm({ selectedItem, setRows, getDiagnosis, rows, user }) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [inputData, setInputData] = useState({
-    name: selectedItem.name,
-    id: selectedItem.id
+    title: selectedItem.title,
+    id: selectedItem._id
   });
-  const { name, id } = inputData;
+  const { title, id } = inputData;
   const handleChange = (e) => {
     setInputData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value
+      title: e.target.value
     }));
   };
 
@@ -32,7 +32,7 @@ export default function EditDiagnosisForm({ selectedItem, setRows, rows, user })
 
   // add changes made to the table
   const updatedDiagnosisList = (id, inputData) => {
-    setRows(rows.map((row) => (row.id === id ? inputData : row)));
+    setRows(rows.map((row) => (row._id === id ? inputData : row)));
   };
 
   const handleUpdateDiagnosis = async (e) => {
@@ -44,11 +44,13 @@ export default function EditDiagnosisForm({ selectedItem, setRows, rows, user })
       setAuthToken(user.token);
     }
     try {
-      const { data } = await updateDiagnosisItem(inputData);
+      const { data } = await updateDiagnosisItem(inputData, id);
+      console.log(inputData);
       updatedDiagnosisList(id, inputData);
       setIsLoading(false);
       setOpen(false);
-      toast.success(data.message);
+      getDiagnosis();
+      toast.success(data.data.message);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.message);
@@ -59,7 +61,7 @@ export default function EditDiagnosisForm({ selectedItem, setRows, rows, user })
       name: 'name',
       id: 'name',
       label: 'Diagnosis',
-      defaultValue: name
+      defaultValue: title
     }
   ];
 

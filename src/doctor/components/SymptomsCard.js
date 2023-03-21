@@ -5,16 +5,18 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import DropdownSearch from '../../common-components/DropdownSearch';
 import setAuthToken from '../../utils/setAuthToken';
-import { addNewSymptom } from '../../utils/api';
+import { addPatientSymptom } from '../../utils/api';
 import TransformButton from '../../common-components/TransformButton';
 import { useCurrentUser } from '../../utils/hooks';
 
 // eslint-disable-next-line no-unused-vars
-function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }) {
+function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, symptoms }) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
+  console.log(symptom, symptoms);
+  const symptomId = symptoms.data.filter((symp) => symp.title === symptom);
 
   const { description } = inputData;
 
@@ -25,9 +27,16 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }
       setAuthToken(user.token);
     }
     try {
-      const title = symptom;
-      const requestBody = { description, sessionId, patientId, title };
-      await addNewSymptom(requestBody);
+      // const title = symptom;
+
+      const note = description;
+      const symptom = symptomId._id;
+      const doctor = user.data.staff_id;
+      const sessionID = sessionId;
+      const patient = patientId;
+      const requestBody = { symptom, note, patient, doctor, sessionID };
+      const { data } = await addPatientSymptom(requestBody);
+      console.log(data);
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -57,6 +66,7 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId }
 
 export default function SymptomCard({ sessionId, patientId, symptomsList }) {
   const [choice, setChoice] = useState([]);
+  console.log(symptomsList);
   const [inputData, setInputData] = useState({
     title: '',
     description: ''
@@ -78,6 +88,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
       setChoice([...filterdArr]);
     }
   };
+  console.log(choice);
 
   return (
     <Paper sx={{ flexGrow: 1 }} className="p-3">
@@ -103,6 +114,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
                       inputData={inputData}
                       sessionId={sessionId}
                       patientId={patientId}
+                      symptoms={symptomsList}
                     />
                     {index === choice.length - 1 ? null : (
                       <Divider orientation="horizontal" variant="fullWidth" />

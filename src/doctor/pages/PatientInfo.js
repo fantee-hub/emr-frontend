@@ -21,7 +21,7 @@ function PatientInfo({ patientId }) {
     try {
       const { data } = await getPatientBiodata(patientId);
       setIsLoading(false);
-      setInfo(data);
+      setInfo(data.data);
     } catch (error) {
       setIsLoading(false);
       console.log(error);

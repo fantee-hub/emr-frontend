@@ -46,7 +46,7 @@ function LabHome() {
             </Avatar>
             <p className="text-xs ml-3">Lab</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper sx={{ width: '70vw' }} className="p-4">
@@ -66,8 +66,7 @@ function LabHome() {
                     <li key={key}>
                       <Link
                         to={`/lab-tests/${patientId}/${sessionId}`}
-                        style={{ textDecoration: 'none' }}
-                      >
+                        style={{ textDecoration: 'none' }}>
                         {patient.name}
                       </Link>
                     </li>

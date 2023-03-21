@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Avatar from '@mui/material/Avatar';
 import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
-import { getReceivedQueues } from '../../utils/api';
+import { getDoctorPatient } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 import { CircularProgress } from '@material-ui/core';
@@ -12,23 +12,23 @@ import { CircularProgress } from '@material-ui/core';
 function DoctorPatients() {
   const user = useCurrentUser();
 
-  const { uuid } = useParams();
+  // const { uuid } = useParams();
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const patientsFromDoctor = async () => {
     setIsLoading(true);
-    const staffId = uuid;
+    // const staffId = uuid;
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getReceivedQueues(staffId, 'PENDING');
+      const { data } = await getDoctorPatient();
+      console.log(data);
       setIsLoading(false);
       if (data) {
-        const patients = data.rows;
+        const patients = data.data;
         setPatientsList(patients);
-        console.log(patientsList);
       }
     } catch (error) {
       toast.error('an error occured');
@@ -48,7 +48,7 @@ function DoctorPatients() {
             </Avatar>
             <p className="text-xs">Cashier</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
 
         <section>
@@ -63,14 +63,13 @@ function DoctorPatients() {
                 </p>
               ) : (
                 patientsList.map((data, key) => {
-                  const { session, Patient } = data;
+                  const { session } = data;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/patient-invoice/${session.id}/${Patient.id}`}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        {data.Patient.name}
+                        to={`/patient-invoice/${session}/${data._id}`}
+                        style={{ textDecoration: 'none' }}>
+                        {data.name}
                       </Link>
                     </li>
                   );

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import axios from 'axios';
+
 import { toast } from 'react-toastify';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -10,8 +10,15 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { Delete } from '@mui/icons-material';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
-import authHeader from '../../redux/features/auth/authHeader';
+
 import { DialogContent, DialogContentText } from '@material-ui/core';
+import {
+  deleteInventory,
+  deletePatient,
+  deleteStaff,
+  deleteSymptom,
+  deleteDiagnosis
+} from '../../utils/api';
 
 export default function DeleteDialog({ id, getUpdatedList, item, role }) {
   const [open, setOpen] = React.useState(false);
@@ -39,15 +46,21 @@ export default function DeleteDialog({ id, getUpdatedList, item, role }) {
     setIsLoading(true);
 
     try {
-      await axios({
-        method: 'delete',
-        // url: `https://emr-server.herokuapp.com/${role}/${id}`,
-        url: `${process.env.REACT_APP_BASEURL}/${role}/${id}`,
-        headers: authHeader()
-      }).then((response) => {
-        toast.success(response.data.data);
-        getUpdatedList()
-      });
+      const { data } =
+        role === 'inventory'
+          ? await deleteInventory(id)
+          : role === 'patients'
+          ? await deletePatient(id)
+          : role === 'staff'
+          ? await deleteStaff(id)
+          : role === 'symptoms'
+          ? await deleteSymptom(id)
+          : await deleteDiagnosis(id);
+      setIsLoading(false);
+      setOpen(false);
+      getUpdatedList();
+      console.log(data);
+      toast.success(data.data);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.message);
@@ -77,8 +90,7 @@ export default function DeleteDialog({ id, getUpdatedList, item, role }) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: '100%'
-              }}
-            >
+              }}>
               <Button
                 sx={{ mr: 3 }}
                 onClick={handleClose}
@@ -88,8 +100,7 @@ export default function DeleteDialog({ id, getUpdatedList, item, role }) {
                   padding: 12,
                   backgroundColor: '#888888',
                   color: '#000'
-                }}
-              >
+                }}>
                 Cancel
               </Button>
               <div className="w-1/2">

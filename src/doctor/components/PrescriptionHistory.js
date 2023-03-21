@@ -4,9 +4,14 @@ import { Circle, Healing } from '@mui/icons-material';
 import React from 'react';
 
 function PrescriptionHistory({ prescription, isLoading }) {
-  const { Prescriptions, createdAt, status } = prescription;
-  const date = !prescription ? 'N/A' : new Date(createdAt).toDateString();
-  const sessionStatus = !prescription ? 'N/A' : status;
+  // const { prescription, session } = prescription;
+  console.log(prescription.prescription);
+  const date =
+    prescription && prescription.prescription
+      ? new Date(prescription.session.createdAt).toDateString()
+      : 'N/A';
+  const sessionStatus =
+    prescription && prescription.prescription ? prescription.session.status : 'N/A';
   return (
     <div className="p-10">
       <div className="flex flex-row items-center">
@@ -38,21 +43,23 @@ function PrescriptionHistory({ prescription, isLoading }) {
       <div className="grid-body">
         {isLoading ? (
           <CircularProgress size={30} />
-        ) : Prescriptions && !Prescriptions.length ? (
+        ) : !prescription ? (
           <p className="text-xl font-bold pl-3 mb-3 text-red-500">
             There are no prescriptions for this session
           </p>
         ) : (
-          Prescriptions &&
-          Prescriptions.map((item, index) => {
-            const { quantity, note, days, drug, doctor } = item;
+          prescription &&
+          prescription.prescription &&
+          prescription.prescription.length &&
+          prescription.prescription.map((item, index) => {
+            const { quantity, note, days, drugId } = item;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
                   <Grid item xs={2}>
                     <div className="flex flex-row items-center">
                       <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
-                      {drug.name}
+                      {drugId.name}
                     </div>
                   </Grid>
                   <Grid item xs={2}>
@@ -64,11 +71,11 @@ function PrescriptionHistory({ prescription, isLoading }) {
                   <Grid item xs={4}>
                     {note}
                   </Grid>
-                  <Grid item xs={2} style={{ color: '#808080' }}>
+                  {/* <Grid item xs={2} style={{ color: '#808080' }}>
                     {doctor.fullName}
-                  </Grid>
+                  </Grid> */}
                 </Grid>
-                {index !== Prescriptions.length - 1 ? (
+                {index !== prescription.prescription.length - 1 ? (
                   <Divider variant="fullWidth" orientation="horizontal" />
                 ) : null}
               </>

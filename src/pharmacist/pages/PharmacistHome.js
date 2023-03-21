@@ -22,7 +22,6 @@ function PharmacistHome() {
       setAuthToken(user.token);
     }
     try {
-      
       const { data } = await getApprovedPayments();
       setIsLoading(false);
       if (data) {
@@ -48,7 +47,7 @@ function PharmacistHome() {
             </Avatar>
             <p className="text-xs">Pharmacist</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper sx={{ width: '70vw' }} className="p-4">
@@ -62,21 +61,22 @@ function PharmacistHome() {
                 </p>
               ) : (
                 payments &&
-                payments.filter(payment => !payment.done && payment.type !== "P").map((payment, key) => {
-                  const { patientId, patient, sessionId, id } = payment;
-                  return (
-                    <li key={key}>
-                      <Link
-                        to={`/approved-invoice/${patientId}/${sessionId}/${id}`}
-                        style={{ textDecoration: 'none' }}>
-                        {patient.name}
-                      </Link>
-                    </li>
-                  );
-                })
+                payments
+                  .filter((payment) => !payment.done && payment.type !== 'P')
+                  .map((payment, key) => {
+                    const { patientId, patient, sessionId, id } = payment;
+                    return (
+                      <li key={key}>
+                        <Link
+                          to={`/approved-invoice/${patientId}/${sessionId}/${id}`}
+                          style={{ textDecoration: 'none' }}>
+                          {patient.name}
+                        </Link>
+                      </li>
+                    );
+                  })
               )}
             </ol>
- 
           </Paper>
         </section>
       </div>

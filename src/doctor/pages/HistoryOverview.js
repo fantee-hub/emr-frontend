@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -19,15 +19,15 @@ function HistoryOverview() {
   const user = useCurrentUser();
 
   const [historyList, setHistoryList] = useState([]);
-  let { patientId } = useParams();
+  // let { patientId } = useParams();
 
   const getPatientsHistory = async () => {
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getAllSessionsForPatient(patientId);
-      const history = data.rows;
+      const { data } = await getAllSessionsForPatient();
+      const history = data.data.filter((patient) => patient.patient !== null);
       console.log(data);
       if (data) {
         setHistoryList(history);
@@ -48,8 +48,8 @@ function HistoryOverview() {
         <Paper style={{ padding: 10 }}>
           <List>
             {historyList.map((history, index) => {
-              const { createdAt, id } = history;
-              const sessionId = id;
+              const { createdAt, _id } = history;
+              const sessionId = _id;
               const month = new Date(createdAt).toLocaleString('default', { month: 'long' });
               const monthShortened = new Date(createdAt).toLocaleString('default', {
                 month: 'short'
@@ -60,8 +60,7 @@ function HistoryOverview() {
                   <ListItem
                     component={Link}
                     to={`/history/${sessionId}`}
-                    className="hover:bg-slate-100"
-                  >
+                    className="hover:bg-slate-100">
                     <ListItemAvatar>
                       <Avatar className="bg-orange-500">{monthShortened}</Avatar>
                     </ListItemAvatar>
