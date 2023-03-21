@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Avatar from '@mui/material/Avatar';
 import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
-import { getReceivedQueues } from '../../utils/api';
+import { getDoctorPatient } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 import { CircularProgress } from '@material-ui/core';
@@ -23,11 +23,11 @@ function DoctorPatients() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getReceivedQueues();
+      const { data } = await getDoctorPatient();
       console.log(data);
       setIsLoading(false);
       if (data) {
-        const patients = data;
+        const patients = data.data;
         setPatientsList(patients);
       }
     } catch (error) {
@@ -63,13 +63,13 @@ function DoctorPatients() {
                 </p>
               ) : (
                 patientsList.map((data, key) => {
-                  const { session, patient } = data;
+                  const { session } = data;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/patient-invoice/${session}/${patient._id}`}
+                        to={`/patient-invoice/${session}/${data._id}`}
                         style={{ textDecoration: 'none' }}>
-                        {data.patient.name}
+                        {data.name}
                       </Link>
                     </li>
                   );
