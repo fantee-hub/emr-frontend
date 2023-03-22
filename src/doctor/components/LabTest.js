@@ -11,13 +11,13 @@ import { useCurrentUser } from '../../utils/hooks';
 // const drugs = JSON.parse(localStorage.getItem('drugsList'));
 // const user = JSON.parse(localStorage.getItem('user'));
 
-function LabTestForm({ test, handleChange, inputData, sessionId, patientId, testsList }) {
+function LabTestForm({ test, handleChange, sessionId, patientId, testsList }) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  const { description } = inputData;
+  // const { description } = inputData;
 
   const getSelectedTestInfo = (title, list) => {
     return list.find((test) => test.name === title);
@@ -26,14 +26,14 @@ function LabTestForm({ test, handleChange, inputData, sessionId, patientId, test
   const onSubmitTestForm = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    const title = test;
+    // const title = test;
     const testInfo = getSelectedTestInfo(test, testsList);
     console.log(testInfo);
     // const drugId = testInfo.id;
     const patient = patientId;
     const sessionID = sessionId;
-    const price = 1000;
-    const requestBody = { patient, title, description, sessionID, price };
+    const test = testInfo._id;
+    const requestBody = { patient, sessionID, test };
     if (user) {
       setAuthToken(user.token);
     }

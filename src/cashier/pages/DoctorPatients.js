@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Avatar from '@mui/material/Avatar';
 import { Person } from '@mui/icons-material';
@@ -12,18 +12,18 @@ import { CircularProgress } from '@material-ui/core';
 function DoctorPatients() {
   const user = useCurrentUser();
 
-  // const { uuid } = useParams();
+  const { uuid } = useParams();
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const patientsFromDoctor = async () => {
     setIsLoading(true);
-    // const staffId = uuid;
+    const staffId = uuid;
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getDoctorPatient();
+      const { data } = await getDoctorPatient(staffId);
       console.log(data);
       setIsLoading(false);
       if (data) {
