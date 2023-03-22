@@ -32,8 +32,8 @@ function LabTestForm({ test, handleChange, sessionId, patientId, testsList }) {
     // const drugId = testInfo.id;
     const patient = patientId;
     const sessionID = sessionId;
-    const test = testInfo._id;
-    const requestBody = { patient, sessionID, test };
+
+    const requestBody = { patient, sessionID, test: testInfo._id };
     if (user) {
       setAuthToken(user.token);
     }

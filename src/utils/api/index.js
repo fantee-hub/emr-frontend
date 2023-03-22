@@ -174,6 +174,6 @@ export const StaffInvoiceApproval = (data) => {
   return httpService.put(ApprovePaymentUrl + '/confirm', data);
 };
 
-export const getDoctorPatient = (doctorId) => {
-  return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctorId } });
+export const getDoctorPatient = (doctor) => {
+  return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctor } });
 };
