@@ -86,7 +86,7 @@ function PatientInvoice() {
       if (data) {
         setTests(data.data.lab);
         calcTotalTestsAmount(data.data.lab);
-        console.log(data);
+        console.log(tests[0]);
       }
     } catch (error) {
       console.log(error);
@@ -213,6 +213,7 @@ function PatientInvoice() {
               sessionId={sessionId}
               patientId={patientId}
               cashierId={237}
+              labId={tests[0]._id}
             />
           </div>
         </section>

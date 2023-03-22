@@ -157,9 +157,12 @@ export const deleteSymptom = (symptom_id) => {
   return httpService.delete(SymptomsUrl + '/' + symptom_id);
 };
 
-export const approvePayment = (data) => {
-  return httpService.post(ApprovePaymentUrl, data);
+export const approvePayment = (data, id) => {
+  return httpService.patch(cashier + '/approve/payment/' + id, data);
 };
+// export const getPendingPayment = (patient)=>{
+//   return httpService.get(cashier + "/pending", { params: { patient } })
+// }
 export const getApprovedPayments = () => {
   return httpService.get(ApprovePaymentUrl);
 };
@@ -171,6 +174,6 @@ export const StaffInvoiceApproval = (data) => {
   return httpService.put(ApprovePaymentUrl + '/confirm', data);
 };
 
-export const getDoctorPatient = () => {
-  return httpService.get(cashier + '/list');
+export const getDoctorPatient = (doctorId) => {
+  return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctorId } });
 };

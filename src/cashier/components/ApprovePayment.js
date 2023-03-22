@@ -7,23 +7,24 @@ import setAuthToken from '../../utils/setAuthToken';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-function ApprovePayment({ user, amount, sessionId, patientId, cashierId }) {
+function ApprovePayment({ user, amount, labId }) {
   // eslint-disable-next-line no-unused-vars
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const approvePaymentByCashier = async () => {
     setIsSending(true);
-    const requestData = { amount, sessionId, patientId, cashierId };
+    const type = 'lab';
+    const requestData = { type };
     if (user) {
       setAuthToken(user.token);
     }
 
     try {
-      const { data } = await approvePayment(requestData);
+      const { data } = await approvePayment(requestData, labId);
       setIsSending(false);
       console.log(data);
       toast.success('Payment approved succesfully');
-      navigate(`/cashier`)
+      navigate(`/cashier`);
     } catch (error) {
       setIsSending(false);
       console.log(error);
