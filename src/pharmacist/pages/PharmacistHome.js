@@ -23,6 +23,7 @@ function PharmacistHome() {
     }
     try {
       const { data } = await getApprovedPayments();
+      console.log(data);
       setIsLoading(false);
       if (data) {
         setPayments(data);

@@ -164,7 +164,7 @@ export const approvePayment = (data, id) => {
 //   return httpService.get(cashier + "/pending", { params: { patient } })
 // }
 export const getApprovedPayments = () => {
-  return httpService.get(ApprovePaymentUrl);
+  return httpService.get(PrescriptionUrl + patient);
 };
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
@@ -176,4 +176,7 @@ export const StaffInvoiceApproval = (data) => {
 
 export const getDoctorPatient = (doctor) => {
   return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctor } });
+};
+export const getPendingPayments = (patient) => {
+  return httpService.get(cashier + '/pending', { params: { patient } });
 };

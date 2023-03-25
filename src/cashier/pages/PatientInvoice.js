@@ -83,15 +83,16 @@ function PatientInvoice() {
     }
     try {
       const { data } = await getSessionTests(sessionId);
+      console.log(data);
       if (data) {
         setTests(data.data.lab);
         calcTotalTestsAmount(data.data.lab);
-        console.log(tests[0]);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(tests);
   const grandTotalPrescription = calcTotalPrescriptionAmount(prescription);
   const grandTotalTests = calcTotalTestsAmount(tests);
 
@@ -213,7 +214,7 @@ function PatientInvoice() {
               sessionId={sessionId}
               patientId={patientId}
               cashierId={237}
-              labId={tests[0]._id}
+              labId={tests._id}
             />
           </div>
         </section>

@@ -37,6 +37,7 @@ function DoctorPatients() {
   useEffect(() => {
     patientsFromDoctor();
   }, []);
+  console.log(patientsList)
   return (
     <>
       <div className="p-8">
