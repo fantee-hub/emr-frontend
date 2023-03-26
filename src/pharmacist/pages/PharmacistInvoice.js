@@ -13,7 +13,11 @@ import Paper from '@material-ui/core/Paper';
 import { useCurrentUser } from '../../utils/hooks';
 import { useParams, useNavigate } from 'react-router';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPaymentsForPatient, StaffInvoiceApproval } from '../../utils/api';
+import {
+  getApprovedPaymentsForPatient,
+  StaffInvoiceApproval,
+  getPrescriptionBySession
+} from '../../utils/api';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
 
 import { toast } from 'react-toastify';
@@ -51,11 +55,12 @@ function PharmacistInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPaymentsForPatient(patientId, sessionId);
+      const { data } = await getPrescriptionBySession(sessionId);
+      const prescriptionData = data.data.prescription.filter((res) => res.drugId !== null);
       setIsLoading(false);
       if (data) {
-        setRows(data);
-        console.log(data);
+        setRows(prescriptionData);
+        console.log(prescriptionData);
       }
     } catch (error) {
       setIsLoading(false);
@@ -117,7 +122,7 @@ function PharmacistInvoice() {
                       })}
                     </TableRow>
                   </TableHead>
-                  {!isLoading && rows && !rows.length ? (
+                  {rows && !rows.length ? (
                     <tbody>
                       <tr>
                         <td className="text-lg pl-3 mb-3 text-red-500">
@@ -128,21 +133,22 @@ function PharmacistInvoice() {
                   ) : (
                     rows &&
                     rows
-                      .filter((item) => item.Prescriptions.length)
+                      .filter((item) => item.paid)
                       .map((item, index) => {
-                        const { Prescriptions, id, amount } = item;
+                        const { days, drugId, quantity, _id, note } = item;
                         // const { drug, note, quantity, days } = Prescriptions[0];
+                        const amount = quantity * drugId.price;
                         return (
-                          <TableBody key={id}>
+                          <TableBody key={_id}>
                             <TableRow key={index}>
                               <TableCell align="center">{index + 1}</TableCell>
-                              <TableCell align="center">{Prescriptions[0]?.drug?.name}</TableCell>
-                              <TableCell align="center">{Prescriptions[0]?.quantity}</TableCell>
-                              <TableCell align="center">{Prescriptions[0]?.days} days</TableCell>
+                              <TableCell align="center">{drugId.name}</TableCell>
+                              <TableCell align="center">{quantity}</TableCell>
+                              <TableCell align="center">{days} days</TableCell>
                               <TableCell align="center">
-                                <span>&#8358; {Prescriptions[0]?.drug?.price}</span>
+                                <span>&#8358; {drugId.price}</span>
                               </TableCell>
-                              <TableCell align="center">{Prescriptions[0]?.note}</TableCell>
+                              <TableCell align="center">{note}</TableCell>
                               <TableCell align="center">
                                 <span>&#8358; {amount}</span>
                               </TableCell>
