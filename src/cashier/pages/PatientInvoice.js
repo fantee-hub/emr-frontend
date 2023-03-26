@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router';
-import { getSessionPrescriptions, getSessionTests } from '../../utils/api';
+import { getSessionPrescriptions, getSessionTests, getPendingPayments } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import ApprovePayment from '../components/ApprovePayment';
 import { useCurrentUser } from '../../utils/hooks';
@@ -56,7 +56,7 @@ function PatientInvoice() {
       tests &&
       tests
         .filter((item) => !item.paid)
-        .map((item) => item.price)
+        .map((item) => item.test.price)
         .reduce((prev, curr) => prev + curr, 0)
     );
   };
@@ -66,10 +66,12 @@ function PatientInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getSessionPrescriptions(sessionId);
+      const { data } = await getPendingPayments(patientId);
+      const prescriptions = data.data.prescription.filter((presc) => presc.drugId !== null);
       if (data) {
-        setPrescription(data.data.prescription);
-        console.log(data);
+        setPrescription(prescriptions);
+
+        console.log(prescriptions);
         const drugs = prescription.map((item) => item.drug);
         calcTotalPrescriptionAmount(drugs);
       }
@@ -82,17 +84,19 @@ function PatientInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getSessionTests(sessionId);
-      console.log(data);
+      const { data } = await getPendingPayments(patientId);
+      const labTests = data.data.test.labs.filter((labTest) => labTest.test !== null);
+
       if (data) {
-        setTests(data.data.lab);
-        calcTotalTestsAmount(data.data.lab);
+        setTests(labTests);
+        calcTotalTestsAmount(labTests);
+        console.log(labTests);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(tests);
+  // console.log(tests[tests.length - 1].test._id);
   const grandTotalPrescription = calcTotalPrescriptionAmount(prescription);
   const grandTotalTests = calcTotalTestsAmount(tests);
 
@@ -189,11 +193,11 @@ function PatientInvoice() {
                     tests
                       .filter((test) => !test.paid)
                       .map((test, index) => {
-                        const { title, description, price } = test;
+                        const { name, description, price } = test.test;
                         return (
                           <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center">{title}</TableCell>
+                            <TableCell align="center">{name}</TableCell>
                             <TableCell align="center">{description}</TableCell>
                             <TableCell align="center">{price}</TableCell>
                           </TableRow>
@@ -214,7 +218,7 @@ function PatientInvoice() {
               sessionId={sessionId}
               patientId={patientId}
               cashierId={237}
-              labId={tests._id}
+              labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
             />
           </div>
         </section>
