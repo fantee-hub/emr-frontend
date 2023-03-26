@@ -7,13 +7,13 @@ import setAuthToken from '../../utils/setAuthToken';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-function ApprovePayment({ user, amount, labId }) {
+function ApprovePayment({ user, amount, labId, types }) {
   // eslint-disable-next-line no-unused-vars
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const approvePaymentByCashier = async () => {
     setIsSending(true);
-    const type = 'lab';
+    const type = types === 'drug' ? 'prescription' : types === 'test' ? 'lab' : types;
     const requestData = { type };
     if (user) {
       setAuthToken(user.token);

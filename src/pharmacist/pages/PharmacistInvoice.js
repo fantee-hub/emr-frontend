@@ -43,7 +43,6 @@ function PharmacistInvoice() {
   const [isLoading, setIsLoading] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
 
-
   const classes = useStyles();
 
   const getPatientsApprovedInvoice = async () => {
@@ -72,13 +71,12 @@ function PharmacistInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const type = "P"
-      const requestData = { paymentId, type }
+      const type = 'P';
+      const requestData = { paymentId, type };
       const { data } = await StaffInvoiceApproval(requestData);
       setIsApproving(false);
       toast.success(data.message);
-      navigate(`/pharmacist`)
-
+      navigate(`/pharmacist`);
     } catch (error) {
       setIsApproving(false);
       toast.error('an error occured');
@@ -98,7 +96,7 @@ function PharmacistInvoice() {
             </Avatar>
             <p className="text-xs">Pharmacist</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper className="flex flex-col items-center flex-1 px-3">
@@ -160,9 +158,7 @@ function PharmacistInvoice() {
         </section>
 
         <section className="mt-5">
-          <Paper className="flex flex-col items-center flex-1 px-3">
-            <h3>Tests</h3>
-            {isLoading ? (
+          {/* {isLoading ? (
               <CircularProgress size={30} />
             ) : (
               <TableContainer component={Paper}>
@@ -186,7 +182,8 @@ function PharmacistInvoice() {
                         </td>
                       </tr>
                     ) : (
-                      rows && rows
+                      rows &&
+                      rows
                         .filter((item) => item.Prescriptions.length)
                         .map((item, index) => {
                           const { Prescriptions } = item;
@@ -195,7 +192,9 @@ function PharmacistInvoice() {
                             <TableRow key={index}>
                               <TableCell align="center">{index + 1}</TableCell>
                               <TableCell align="center">{Prescriptions[0]?.test?.title}</TableCell>
-                              <TableCell align="center">{Prescriptions[0]?.test?.description}</TableCell>
+                              <TableCell align="center">
+                                {Prescriptions[0]?.test?.description}
+                              </TableCell>
                               <TableCell align="center">{Prescriptions[0]?.test?.price}</TableCell>
                             </TableRow>
                           );
@@ -204,19 +203,16 @@ function PharmacistInvoice() {
                   </TableBody>
                 </Table>
               </TableContainer>
-            )}
-            <div className="w-1/3 flex self-end">
-              <div className="w-full mt-3 mb-3">
-
-                <IntuitiveButton
-                  onClick={confirmDrugDispersal}
-                  text="confirm drug dispersal"
-                  isLoading={isApproving}
-                />
-              </div>
-
+            )} */}
+          <div className="w-1/3 flex self-end">
+            <div className="w-full mt-3 mb-3">
+              <IntuitiveButton
+                onClick={confirmDrugDispersal}
+                text="confirm drug dispersal"
+                isLoading={isApproving}
+              />
             </div>
-          </Paper>
+          </div>
         </section>
       </div>
     </>
@@ -225,8 +221,8 @@ function PharmacistInvoice() {
 
 export default PharmacistInvoice;
 
-
-{/* {rows.tests && !rows.tests.length ? (
+{
+  /* {rows.tests && !rows.tests.length ? (
                     <tbody>
                       <tr>
                         <td className="text-lg pl-3 mb-3 text-red-500">
@@ -255,4 +251,5 @@ export default PharmacistInvoice;
                         </TableBody>
                       );
                     })
-                  )} */}
+                  )} */
+}

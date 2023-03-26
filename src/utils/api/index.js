@@ -180,3 +180,6 @@ export const getDoctorPatient = (doctor) => {
 export const getPendingPayments = (patient) => {
   return httpService.get(cashier + '/pending', { params: { patient } });
 };
+export const getPrescriptionBySession = (sessionId) => {
+  return httpService.get(PrescriptionUrl + '/session/' + sessionId);
+};

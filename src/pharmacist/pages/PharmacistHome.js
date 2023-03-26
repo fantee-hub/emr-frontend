@@ -26,7 +26,7 @@ function PharmacistHome() {
       console.log(data);
       setIsLoading(false);
       if (data) {
-        setPayments(data);
+        setPayments(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -63,13 +63,13 @@ function PharmacistHome() {
               ) : (
                 payments &&
                 payments
-                  .filter((payment) => !payment.done && payment.type !== 'P')
+                  .filter((payment) => payment.paid)
                   .map((payment, key) => {
-                    const { patientId, patient, sessionId, id } = payment;
+                    const { patient, sessionID, _id } = payment;
                     return (
                       <li key={key}>
                         <Link
-                          to={`/approved-invoice/${patientId}/${sessionId}/${id}`}
+                          to={`/approved-invoice/${patient._id}/${sessionID}/${_id}`}
                           style={{ textDecoration: 'none' }}>
                           {patient.name}
                         </Link>

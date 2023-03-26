@@ -85,7 +85,10 @@ function PatientInvoice() {
     }
     try {
       const { data } = await getPendingPayments(patientId);
-      const labTests = data.data.test.labs.filter((labTest) => labTest.test !== null);
+      console.log(data);
+      const labTests = data.data.test.labs.filter(
+        (labTest) => labTest.test !== undefined && labTest.test !== null
+      );
 
       if (data) {
         setTests(labTests);
@@ -168,6 +171,24 @@ function PatientInvoice() {
             <p className="flex self-end text-lg font-bold">
               Total:&nbsp; <span>&#8358;</span> {grandTotalPrescription.toLocaleString()}
             </p>
+            <div className="w-1/3 flex self-end">
+              <ApprovePayment
+                user={user}
+                amount={grandTotalPrescription}
+                sessionId={sessionId}
+                patientId={patientId}
+                types={
+                  prescription && !prescription.length
+                    ? prescription
+                    : prescription[prescription.length - 1].drugId.type
+                }
+                labId={
+                  prescription && !prescription.length
+                    ? prescription
+                    : prescription[prescription.length - 1]._id
+                }
+              />
+            </div>
           </Paper>
           <Paper className="flex mt-4 flex-col items-center flex-1 px-3">
             <h3>Tests</h3>
@@ -210,17 +231,17 @@ function PatientInvoice() {
             <p className="flex self-end text-lg font-bold">
               Total:&nbsp; <span>&#8358;</span> {grandTotalTests.toLocaleString()}
             </p>
+            <div className="w-1/3 flex self-end">
+              <ApprovePayment
+                user={user}
+                amount={grandTotalTests}
+                sessionId={sessionId}
+                patientId={patientId}
+                types={tests && !tests.length ? tests : tests[tests.length - 1].test.type}
+                labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
+              />
+            </div>
           </Paper>
-          <div className="w-1/3 flex self-end">
-            <ApprovePayment
-              user={user}
-              amount={grandTotalPrescription + grandTotalTests}
-              sessionId={sessionId}
-              patientId={patientId}
-              cashierId={237}
-              labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
-            />
-          </div>
         </section>
       </div>
     </>
