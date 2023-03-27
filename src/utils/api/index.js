@@ -166,6 +166,9 @@ export const approvePayment = (data, id) => {
 export const getApprovedPayments = () => {
   return httpService.get(PrescriptionUrl + patient);
 };
+export const getPendingLab = () => {
+  return httpService.get(LabUrl + '/pending-test');
+};
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
 };
@@ -182,4 +185,7 @@ export const getPendingPayments = (patient) => {
 };
 export const getPrescriptionBySession = (sessionId) => {
   return httpService.get(PrescriptionUrl + '/session/' + sessionId);
+};
+export const getLabBySession = (sessionId) => {
+  return httpService.get(LabUrl + '/session/' + sessionId);
 };

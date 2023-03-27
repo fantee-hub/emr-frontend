@@ -6,7 +6,7 @@ import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPayments } from '../../utils/api';
+import { getPendingLab } from '../../utils/api';
 import { CircularProgress } from '@material-ui/core';
 
 function LabHome() {
@@ -21,10 +21,11 @@ function LabHome() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPayments();
+      const { data } = await getPendingLab();
       setIsLoading(false);
       if (data) {
-        setPayments(data);
+        setPayments(data.data);
+        console.log(data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -60,18 +61,20 @@ function LabHome() {
                 </p>
               ) : (
                 payments &&
-                payments.map((payment, key) => {
-                  const { patientId, patient, sessionId } = payment;
-                  return (
-                    <li key={key}>
-                      <Link
-                        to={`/lab-tests/${patientId}/${sessionId}`}
-                        style={{ textDecoration: 'none' }}>
-                        {patient.name}
-                      </Link>
-                    </li>
-                  );
-                })
+                payments
+                  .filter((payment) => payment.paid)
+                  .map((payment, key) => {
+                    const { patient, sessionID } = payment;
+                    return (
+                      <li key={key}>
+                        <Link
+                          to={`/lab-tests/${patient._id}/${sessionID}`}
+                          style={{ textDecoration: 'none' }}>
+                          {patient.name}
+                        </Link>
+                      </li>
+                    );
+                  })
               )}
             </ol>
           </Paper>
