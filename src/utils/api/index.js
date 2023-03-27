@@ -170,8 +170,8 @@ export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
 };
 
-export const StaffInvoiceApproval = (data) => {
-  return httpService.put(ApprovePaymentUrl + '/confirm', data);
+export const dispersePrescription = (prescriptionId) => {
+  return httpService.patch(PrescriptionUrl + '/disperse/' + prescriptionId);
 };
 
 export const getDoctorPatient = (doctor) => {

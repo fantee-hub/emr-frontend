@@ -15,7 +15,7 @@ import { useParams, useNavigate } from 'react-router';
 import setAuthToken from '../../utils/setAuthToken';
 import {
   getApprovedPaymentsForPatient,
-  StaffInvoiceApproval,
+  dispersePrescription,
   getPrescriptionBySession
 } from '../../utils/api';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
@@ -77,10 +77,10 @@ function PharmacistInvoice() {
     }
     try {
       const type = 'P';
-      const requestData = { paymentId, type };
-      const { data } = await StaffInvoiceApproval(requestData);
+      // const requestData = { paymentId, type };
+      const { data } = await dispersePrescription(rows[rows.length - 1]._id);
       setIsApproving(false);
-      toast.success(data.message);
+      toast.success(data.data.message);
       navigate(`/pharmacist`);
     } catch (error) {
       setIsApproving(false);
