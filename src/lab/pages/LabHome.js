@@ -23,9 +23,10 @@ function LabHome() {
     try {
       const { data } = await getPendingLab();
       setIsLoading(false);
+      const filterPatient = data.data.filter((res) => res.test !== undefined && res.test !== null);
       if (data) {
-        setPayments(data.data);
-        console.log(data);
+        setPayments(filterPatient);
+        console.log(filterPatient);
       }
     } catch (error) {
       setIsLoading(false);

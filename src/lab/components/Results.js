@@ -15,7 +15,7 @@ function Results({ role, testId, title, description }) {
     result: '',
     resultDescription: ''
   });
-  const { result, resultDescription } = resultValue;
+  const { result } = resultValue;
 
   const [isAddingTest, setIsAddingTest] = useState(false);
 
@@ -29,24 +29,24 @@ function Results({ role, testId, title, description }) {
   // pass title and description as params in the submit function
 
   const addTestResult = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     setIsAddingTest(true);
     const id = testId;
-    const requestData = { id, title, description, result, resultDescription };
+    const requestData = { result };
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await addLabTestResult(requestData);
+      const { data } = await addLabTestResult(requestData, id);
       setIsAddingTest(false);
       if (data) {
-        console.log(data)
+        console.log(data);
         toast.success('Result added successfully');
       }
       navigate(`/${role}`);
     } catch (error) {
       setIsAddingTest(false);
-      console.log(error)
+      console.log(error);
       toast.error(error.message);
     }
   };

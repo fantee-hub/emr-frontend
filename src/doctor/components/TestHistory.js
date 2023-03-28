@@ -8,6 +8,7 @@ function TestHistory({ tests, isLoading }) {
   // const { LabTests, createdAt } = tests;
   const date = tests && tests.lab ? new Date(tests.session.createdAt).toDateString() : 'N/A';
   const sessionStatus = tests && tests.lab ? tests.session.status : 'N/A';
+  console.log(tests);
 
   return (
     <div className="p-10">
@@ -49,14 +50,14 @@ function TestHistory({ tests, isLoading }) {
           tests.lab &&
           tests.lab.length &&
           tests.lab.map((item, index) => {
-            const { title, description } = item;
+            const { name, description } = item.test;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
                   <Grid item xs={2}>
                     <div className="flex flex-row items-center">
                       <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
-                      {title}
+                      {name}
                     </div>
                   </Grid>
                   <Grid item xs={2}>

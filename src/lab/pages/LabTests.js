@@ -46,7 +46,7 @@ function LabTests() {
       setIsLoading(false);
       if (data) {
         setRows(labData);
-        console.log(data.data);
+        console.log(labData);
       }
     } catch (error) {
       setIsLoading(false);
@@ -106,12 +106,12 @@ function LabTests() {
                       rows
                         .filter((item) => item.paid)
                         .map((item, index) => {
-                          const { _id, name, description, price } = item.test;
+                          const { name, description, price } = item.test;
                           return (
                             <TableRow
                               key={index}
                               className="cursor-pointer hover:bg-slate-200"
-                              onClick={() => handleRowClick(_id, name, description)}>
+                              onClick={() => handleRowClick(item._id, name, description)}>
                               <TableCell align="center">{index + 1}</TableCell>
                               <TableCell align="center">{name}</TableCell>
                               <TableCell align="center">{description}</TableCell>
