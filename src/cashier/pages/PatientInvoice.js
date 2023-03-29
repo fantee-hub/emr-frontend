@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router';
-import { getSessionPrescriptions, getSessionTests } from '../../utils/api';
+import { getSessionPrescriptions, getSessionTests, getPendingPayments } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import ApprovePayment from '../components/ApprovePayment';
 import { useCurrentUser } from '../../utils/hooks';
@@ -47,7 +47,7 @@ function PatientInvoice() {
       prescription &&
       prescription
         .filter((item) => !item.paid)
-        .map((item) => item.quantity * item.drug.price)
+        .map((item) => item.quantity * item.drugId.price)
         .reduce((prev, curr) => prev + curr, 0)
     );
   };
@@ -56,7 +56,7 @@ function PatientInvoice() {
       tests &&
       tests
         .filter((item) => !item.paid)
-        .map((item) => item.price)
+        .map((item) => item.test.price)
         .reduce((prev, curr) => prev + curr, 0)
     );
   };
@@ -66,10 +66,12 @@ function PatientInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getSessionPrescriptions(sessionId);
+      const { data } = await getPendingPayments(patientId);
+      const prescriptions = data.data.prescription.filter((presc) => presc.drugId !== null);
       if (data) {
-        setPrescription(data.Prescriptions);
-        console.log(data);
+        setPrescription(prescriptions);
+
+        console.log(prescriptions);
         const drugs = prescription.map((item) => item.drug);
         calcTotalPrescriptionAmount(drugs);
       }
@@ -82,15 +84,22 @@ function PatientInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getSessionTests(sessionId);
+      const { data } = await getPendingPayments(patientId);
+      console.log(data);
+      const labTests = data.data.test.labs.filter(
+        (labTest) => labTest.test !== undefined && labTest.test !== null
+      );
+
       if (data) {
-        setTests(data.LabTests);
-        calcTotalTestsAmount(data.LabTests);
+        setTests(labTests);
+        calcTotalTestsAmount(labTests);
+        console.log(labTests);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  // console.log(tests[tests.length - 1].test._id);
   const grandTotalPrescription = calcTotalPrescriptionAmount(prescription);
   const grandTotalTests = calcTotalTestsAmount(tests);
 
@@ -110,7 +119,7 @@ function PatientInvoice() {
             </Avatar>
             <p className="text-xs">Cashier</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section className="flex flex-col space-y-3">
           <Paper className="flex flex-col items-center flex-1 px-3">
@@ -135,18 +144,18 @@ function PatientInvoice() {
                     </tr>
                   ) : (
                     prescription
-                      .filter((item) => !item.paid && item.drug.type === "DRUG")
+                      .filter((item) => !item.paid && item.drugId.type === 'drug')
                       .map((item, index) => {
-                        const { drug, note, id, quantity, days } = item;
-                        const total = quantity * drug.price;
+                        const { drugId, note, quantity, days } = item;
+                        const total = quantity * drugId.price;
                         return (
-                          <TableRow key={id}>
+                          <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center">{drug.name}</TableCell>
+                            <TableCell align="center">{drugId.name}</TableCell>
                             <TableCell align="center">{quantity}</TableCell>
                             <TableCell align="center">{days} days</TableCell>
                             <TableCell align="center">
-                              <span>&#8358;</span> {drug.price}
+                              <span>&#8358;</span> {drugId.price}
                             </TableCell>
                             <TableCell align="center">{note}</TableCell>
                             <TableCell align="center">
@@ -162,6 +171,24 @@ function PatientInvoice() {
             <p className="flex self-end text-lg font-bold">
               Total:&nbsp; <span>&#8358;</span> {grandTotalPrescription.toLocaleString()}
             </p>
+            <div className="w-1/3 flex self-end">
+              <ApprovePayment
+                user={user}
+                amount={grandTotalPrescription}
+                sessionId={sessionId}
+                patientId={patientId}
+                types={
+                  prescription && !prescription.length
+                    ? prescription
+                    : prescription[prescription.length - 1].drugId.type
+                }
+                labId={
+                  prescription && !prescription.length
+                    ? prescription
+                    : prescription[prescription.length - 1]._id
+                }
+              />
+            </div>
           </Paper>
           <Paper className="flex mt-4 flex-col items-center flex-1 px-3">
             <h3>Tests</h3>
@@ -187,11 +214,11 @@ function PatientInvoice() {
                     tests
                       .filter((test) => !test.paid)
                       .map((test, index) => {
-                        const { title, description, id, price } = test;
+                        const { name, description, price } = test.test;
                         return (
-                          <TableRow key={id}>
+                          <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center">{title}</TableCell>
+                            <TableCell align="center">{name}</TableCell>
                             <TableCell align="center">{description}</TableCell>
                             <TableCell align="center">{price}</TableCell>
                           </TableRow>
@@ -204,16 +231,17 @@ function PatientInvoice() {
             <p className="flex self-end text-lg font-bold">
               Total:&nbsp; <span>&#8358;</span> {grandTotalTests.toLocaleString()}
             </p>
+            <div className="w-1/3 flex self-end">
+              <ApprovePayment
+                user={user}
+                amount={grandTotalTests}
+                sessionId={sessionId}
+                patientId={patientId}
+                types={tests && !tests.length ? tests : tests[tests.length - 1].test.type}
+                labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
+              />
+            </div>
           </Paper>
-          <div className="w-1/3 flex self-end">
-            <ApprovePayment
-              user={user}
-              amount={grandTotalPrescription + grandTotalTests}
-              sessionId={sessionId}
-              patientId={patientId}
-              cashierId={237}
-            />
-          </div>
         </section>
       </div>
     </>

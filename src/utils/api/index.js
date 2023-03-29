@@ -100,8 +100,8 @@ export const getSessionPrescriptions = (sessionId) => {
 export const addNewTest = (data) => {
   return httpService.post(LabUrl + '/create', data);
 };
-export const addLabTestResult = (data) => {
-  return httpService.patch(LabUrl, data);
+export const addLabTestResult = (data, labId) => {
+  return httpService.patch(LabUrl + '/upload-result/' + { labId }, data);
 };
 export const getSessionTests = (sessionId) => {
   return httpService.get(TestsInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
@@ -157,20 +157,35 @@ export const deleteSymptom = (symptom_id) => {
   return httpService.delete(SymptomsUrl + '/' + symptom_id);
 };
 
-export const approvePayment = (data) => {
-  return httpService.post(ApprovePaymentUrl, data);
+export const approvePayment = (data, id) => {
+  return httpService.patch(cashier + '/approve/payment/' + id, data);
 };
+// export const getPendingPayment = (patient)=>{
+//   return httpService.get(cashier + "/pending", { params: { patient } })
+// }
 export const getApprovedPayments = () => {
-  return httpService.get(ApprovePaymentUrl);
+  return httpService.get(PrescriptionUrl + patient);
+};
+export const getPendingLab = () => {
+  return httpService.get(LabUrl + '/pending-test');
 };
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
 };
 
-export const StaffInvoiceApproval = (data) => {
-  return httpService.put(ApprovePaymentUrl + '/confirm', data);
+export const dispersePrescription = (prescriptionId) => {
+  return httpService.patch(PrescriptionUrl + '/disperse/' + prescriptionId);
 };
 
-export const getDoctorPatient = () => {
-  return httpService.get(cashier + '/list');
+export const getDoctorPatient = (doctor) => {
+  return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctor } });
+};
+export const getPendingPayments = (patient) => {
+  return httpService.get(cashier + '/pending', { params: { patient } });
+};
+export const getPrescriptionBySession = (sessionId) => {
+  return httpService.get(PrescriptionUrl + '/session/' + sessionId);
+};
+export const getLabBySession = (sessionId) => {
+  return httpService.get(LabUrl + '/session/' + sessionId);
 };

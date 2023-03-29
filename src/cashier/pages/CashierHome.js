@@ -38,6 +38,7 @@ function CashierHome() {
   useEffect(() => {
     getAllDoctors();
   }, []);
+  console.log(doctors);
   return (
     <>
       <div className="p-8">

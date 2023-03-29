@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { useCurrentUser } from '../../utils/hooks';
 import { useNavigate, useParams } from 'react-router';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPaymentsForPatient } from '../../utils/api';
+import { getLabBySession } from '../../utils/api';
 import { CircularProgress } from '@material-ui/core';
 // import { Link } from 'react-router-dom';
 
@@ -23,14 +23,14 @@ const useStyles = makeStyles({
   }
 });
 
-const headers = ['Index', 'Title', 'Description'];
+const headers = ['Index', 'Title', 'Description', 'Price'];
 
 function LabTests() {
   const classes = useStyles();
   const user = useCurrentUser();
   const navigate = useNavigate();
 
-  const { patientId, sessionId } = useParams();
+  const { sessionId } = useParams();
 
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,10 +41,12 @@ function LabTests() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPaymentsForPatient(patientId, sessionId);
+      const { data } = await getLabBySession(sessionId);
+      const labData = data.data.lab.filter((res) => res.test !== undefined && res.test !== null);
       setIsLoading(false);
       if (data) {
-        setRows(data);
+        setRows(labData);
+        console.log(labData);
       }
     } catch (error) {
       setIsLoading(false);
@@ -71,7 +73,7 @@ function LabTests() {
             </Avatar>
             <p className="text-xs">Lab staff</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper className="flex flex-col items-center justify-center flex-1 px-3">
@@ -93,26 +95,28 @@ function LabTests() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {!isLoading && rows && !rows.length ? (
+                    {rows && !rows.length ? (
                       <tr>
                         <td className="text-lg pl-3 mb-3 text-red-500">
                           No tests in this invoice.
                         </td>
                       </tr>
                     ) : (
-                      rows && rows.filter(item => item.Prescriptions.length)
+                      rows &&
+                      rows
+                        .filter((item) => item.paid)
                         .map((item, index) => {
-                          const { Prescriptions } = item;
+                          const { name, description, price } = item.test;
                           return (
-                              <TableRow key={index}
-                                className="cursor-pointer hover:bg-slate-200"
-                                onClick={() => handleRowClick(Prescriptions[0]?.testId, Prescriptions[0]?.test?.title, Prescriptions[0]?.test?.description)}
-                              >
-                                <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{Prescriptions[0]?.test?.title}</TableCell>
-                            <TableCell align="center">{Prescriptions[0]?.test?.description}</TableCell>
-                            <TableCell align="center">{Prescriptions[0]?.test?.price}</TableCell>
-                              </TableRow>
+                            <TableRow
+                              key={index}
+                              className="cursor-pointer hover:bg-slate-200"
+                              onClick={() => handleRowClick(item._id, name, description)}>
+                              <TableCell align="center">{index + 1}</TableCell>
+                              <TableCell align="center">{name}</TableCell>
+                              <TableCell align="center">{description}</TableCell>
+                              <TableCell align="center">{price}</TableCell>
+                            </TableRow>
                           );
                         })
                     )}
