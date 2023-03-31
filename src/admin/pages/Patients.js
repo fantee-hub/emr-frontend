@@ -166,7 +166,7 @@ function PatientDetails() {
       bloodGroup,
       occupation,
       registration,
-      patient_id: patientId
+      patient: patientId
     };
     if (user) {
       setAuthToken(user.token);
