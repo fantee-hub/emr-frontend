@@ -35,6 +35,7 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
     setIsLoading(true);
     // const uuid = selectedWorker.uuid;
     const requestData = { clockIn, clockOut, id };
+    console.log(clockIn, clockOut);
     if (user) {
       setAuthToken(user.token);
     }
@@ -114,8 +115,7 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
                 backgroundColor: '#888888',
                 color: '#000',
                 justifySelf: 'self-end'
-              }}
-            >
+              }}>
               Cancel
             </Button>
           </DialogActions>

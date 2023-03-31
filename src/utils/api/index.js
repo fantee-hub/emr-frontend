@@ -36,7 +36,7 @@ export const updateOnlineStatus = (online) => {
   return httpService.patch(StaffUrl + '/status/', null, { params: { online } });
 };
 export const getOnlineStaffs = (online) => {
-  return httpService.get(StaffUrl + '/status/', { param: { online } });
+  return httpService.get(StaffUrl + '/status/', { params: { online } });
 };
 
 export const setStaffShiftHours = (data) => {
