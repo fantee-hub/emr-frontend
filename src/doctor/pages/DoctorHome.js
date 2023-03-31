@@ -17,7 +17,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import PatientsPersonalPage from './PatientsPersonalPage';
-import { getReceivedQueues } from '../../utils/api';
+import { getReceivedQueues, updateOnlineStatus } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 
@@ -70,18 +70,28 @@ function DoctorHome() {
       console.log(error);
     }
   };
+  const onlinehandler = async (online) => {
+    try {
+      const { data } = await updateOnlineStatus(online);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // TODO this function will instead make a patch or put request to update the doctors availability on the backend
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
+      onlinehandler(true);
       setIsDoctorAvailable(true);
       if (availableDoctors.length > 0) {
         setAvailableDoctors(availableDoctors.push(user.data.fullName));
       } else if (availableDoctors.length === 0) {
-        setAvailableDoctors([user.user.fullName]);
+        setAvailableDoctors([user.data.fullName]);
       }
     }
     if (!event.target.checked) {
+      onlinehandler(false);
       setIsDoctorAvailable(false);
       setAvailableDoctors(availableDoctors.filter((doc) => doc !== user.data.fullName));
     }

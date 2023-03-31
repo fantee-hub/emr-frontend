@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import PatientSearchBar from '../../common-components/PatientSearchBar';
 import Box from '@mui/material/Box';
 import Paper from '@material-ui/core/Paper';
-import { getAllPatients, getAllStaff } from '../../utils/api';
+import { getAllPatients, getOnlineStaffs } from '../../utils/api';
 import CollapsibleList from '../components/CollapsibleList';
 import setAuthToken from '../../utils/setAuthToken';
 import {
@@ -66,33 +66,48 @@ function ReceptionistHome() {
   };
 
   const getAvailableDoctors = (allStaff) => {
-    const allDoctors = allStaff.data.filter(
+    const allDoctors = allStaff.data.staffs.filter(
       // TODO this filter should have a condition to also return doctors with available property set to true
-      (staff) => staff.role.toUpperCase() === 'DOCTOR'
+      (staff) => staff.role.toUpperCase() === 'DOCTOR' && staff.online
     );
     setDoctorsList([...allDoctors]);
   };
 
   const dataFiltered = filterData(searchQuery, patientsList);
-
-  const getAllDoctors = async () => {
-    const page = 0;
-    const size = 20;
+  const getOnline = async () => {
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getAllStaff(page, size);
+      const { data } = await getOnlineStaffs(true);
       if (data) {
         getAvailableDoctors(data);
+        console.log(data);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  // const getAllDoctors = async () => {
+  //   const page = 0;
+  //   const size = 20;
+  //   if (user) {
+  //     setAuthToken(user.token);
+  //   }
+  //   try {
+  //     const { data } = await getAllStaff(page, size);
+  //     if (data) {
+  //       getAvailableDoctors(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
-    getAllDoctors();
+    // getAllDoctors();
+    getOnline();
   }, []);
 
   useEffect(() => {

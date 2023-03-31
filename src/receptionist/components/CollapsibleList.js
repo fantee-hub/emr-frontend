@@ -26,6 +26,7 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
   const [open, setOpen] = useState(false);
   const [staffName, setStaffName] = useState('');
   const [isSending, setIsSending] = useState(false);
+  console.log(doctorsList);
 
   const handleClick = () => {
     setOpen(!open);
