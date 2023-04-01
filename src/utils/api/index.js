@@ -39,8 +39,8 @@ export const getOnlineStaffs = (online) => {
   return httpService.get(StaffUrl + '/status/', { params: { online } });
 };
 
-export const setStaffShiftHours = (data) => {
-  return httpService.put(StaffUrl + '/hours', data);
+export const setStaffShiftHours = (data, staffId) => {
+  return httpService.patch(StaffUrl + '/set-clock/' + staffId, data);
 };
 
 export const deleteStaff = (staff_id) => {

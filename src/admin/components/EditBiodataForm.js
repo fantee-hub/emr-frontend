@@ -35,7 +35,7 @@ function EditBiodataForm({
       setIsLoading(false);
       getBiodata();
       handleNotEditing();
-      toast.success(data.message);
+      toast.success(data.data.message);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.response.data.message);

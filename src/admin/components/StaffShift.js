@@ -20,7 +20,7 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
   const [staffClock, setStaffClock] = useState({
     clockIn: selectedStaff.clockIn ? selectedStaff.clockIn : '09:00',
     clockOut: selectedStaff.clockOut ? selectedStaff.clockOut : '00:00',
-    id: selectedStaff.uuid
+    id: selectedStaff.staff_id
   });
   const { clockIn, clockOut, id } = staffClock;
   const handleStaffClockChange = (e) => {
@@ -30,17 +30,18 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
     }));
   };
 
+  console.log(selectedStaff);
   const setStaffTimes = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     // const uuid = selectedWorker.uuid;
-    const requestData = { clockIn, clockOut, id };
+    const requestData = { clockIn, clockOut };
     console.log(clockIn, clockOut);
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await setStaffShiftHours(requestData);
+      const { data } = await setStaffShiftHours(requestData, id);
       setIsLoading(false);
       setOpen(false);
       toast.success(data.message);
