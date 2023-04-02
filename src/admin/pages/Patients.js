@@ -158,7 +158,16 @@ function PatientDetails() {
 
   const addBiodata = async () => {
     setIsAdding(true);
-    const biodata = { age, sex, address, genotype, bloodGroup, occupation, registration, patient_id: patientId };
+    const biodata = {
+      age,
+      sex,
+      address,
+      genotype,
+      bloodGroup,
+      occupation,
+      registration,
+      patient: patientId
+    };
     if (user) {
       setAuthToken(user.token);
     }
@@ -169,7 +178,7 @@ function PatientDetails() {
       getBiodata();
     } catch (error) {
       setIsAdding(false);
-      console.log(error)
+      console.log(error);
       toast.error(error.message);
     }
   };
@@ -181,6 +190,7 @@ function PatientDetails() {
     }
     try {
       const { data } = await getPatientBiodata(patientId);
+      console.log(data);
       setIsLoading(false);
       setInfo(data.data);
     } catch (error) {
@@ -189,7 +199,7 @@ function PatientDetails() {
       // toast.error('an error occured');
     }
   };
-console.log(info)
+  console.log(info);
   useEffect(() => {
     getBiodata();
   }, []);

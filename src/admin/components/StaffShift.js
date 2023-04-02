@@ -12,16 +12,24 @@ import { AlarmAdd } from '@mui/icons-material';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
 import setAuthToken from '../../utils/setAuthToken';
 import { setStaffShiftHours } from '../../utils/api';
+import moment from 'moment';
 
 function StaffShift({ user, selectedStaff, getStaff, name }) {
   const [open, setOpen] = useState(false);
   // eslint-disable-next-line no-unused-vars
+  const timeFormat = 'HH:mm';
   const [isLoading, setIsLoading] = useState(false);
+
   const [staffClock, setStaffClock] = useState({
-    clockIn: selectedStaff.clockIn ? selectedStaff.clockIn : '09:00',
-    clockOut: selectedStaff.clockOut ? selectedStaff.clockOut : '00:00',
-    id: selectedStaff.uuid
+    clockIn: selectedStaff.clockIn
+      ? moment(selectedStaff.clockIn, [timeFormat]).format(timeFormat)
+      : '09:00',
+    clockOut: selectedStaff.clockOut
+      ? moment(selectedStaff.clockOut, [timeFormat]).format(timeFormat)
+      : '00:00',
+    id: selectedStaff.staff_id
   });
+
   const { clockIn, clockOut, id } = staffClock;
   const handleStaffClockChange = (e) => {
     setStaffClock((prevState) => ({
@@ -30,19 +38,20 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
     }));
   };
 
+  console.log(selectedStaff);
   const setStaffTimes = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // const uuid = selectedWorker.uuid;
-    const requestData = { clockIn, clockOut, id };
+    const requestData = { clockIn, clockOut };
+
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await setStaffShiftHours(requestData);
+      const { data } = await setStaffShiftHours(requestData, id);
       setIsLoading(false);
       setOpen(false);
-      toast.success(data.message);
+      toast.success(data.data.message);
       getStaff();
     } catch (error) {
       setIsLoading(false);
@@ -114,8 +123,7 @@ function StaffShift({ user, selectedStaff, getStaff, name }) {
                 backgroundColor: '#888888',
                 color: '#000',
                 justifySelf: 'self-end'
-              }}
-            >
+              }}>
               Cancel
             </Button>
           </DialogActions>

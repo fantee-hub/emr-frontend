@@ -32,9 +32,15 @@ export const updateStaff = (data, staff_id) => {
 export const updateStaffStatus = (staff_id, status) => {
   return httpService.patch(StaffUrl + '/status/' + staff_id, null, { params: { status } });
 };
+export const updateOnlineStatus = (online) => {
+  return httpService.patch(StaffUrl + '/status/', null, { params: { online } });
+};
+export const getOnlineStaffs = (online) => {
+  return httpService.get(StaffUrl + '/status/', { params: { online } });
+};
 
-export const setStaffShiftHours = (data) => {
-  return httpService.put(StaffUrl + '/hours', data);
+export const setStaffShiftHours = (data, staffId) => {
+  return httpService.patch(StaffUrl + '/set-clock/' + staffId, data);
 };
 
 export const deleteStaff = (staff_id) => {
@@ -101,7 +107,7 @@ export const addNewTest = (data) => {
   return httpService.post(LabUrl + '/create', data);
 };
 export const addLabTestResult = (data, labId) => {
-  return httpService.patch(LabUrl + '/upload-result/' + { labId }, data);
+  return httpService.patch(LabUrl + '/upload-result/' + labId, data);
 };
 export const getSessionTests = (sessionId) => {
   return httpService.get(TestsInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
