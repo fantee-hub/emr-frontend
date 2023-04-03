@@ -119,6 +119,12 @@ export const getSessions = (page, size) => {
 export const getAllSessionsForPatient = () => {
   return httpService.get(SessionUrl);
 };
+export const getBySessionId = (sessionId, data) => {
+  return httpService.get(SessionUrl + '/' + sessionId, data);
+};
+export const getSessionByPatientId = (patient) => {
+  return httpService.get(SessionUrl + '/patient', { params: { patient } });
+};
 
 export const addToDiagnosisList = (data) => {
   return httpService.post(StaffUrl + DiagnosisUrl, data);

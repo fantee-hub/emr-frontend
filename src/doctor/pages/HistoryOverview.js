@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
@@ -8,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import { getAllSessionsForPatient } from '../../utils/api';
+import { getSessionByPatientId } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 
@@ -19,14 +20,15 @@ function HistoryOverview() {
   const user = useCurrentUser();
 
   const [historyList, setHistoryList] = useState([]);
-  // let { patientId } = useParams();
+  let { patientId } = useParams();
 
   const getPatientsHistory = async () => {
     if (user) {
       setAuthToken(user.token);
     }
+    // const requestData = { patient: patientId };
     try {
-      const { data } = await getAllSessionsForPatient();
+      const { data } = await getSessionByPatientId(patientId);
       const history = data.data.filter((patient) => patient.patient !== null);
       console.log(data);
       if (data) {
@@ -37,7 +39,7 @@ function HistoryOverview() {
       toast.error(error.message);
     }
   };
-
+  console.log(historyList);
   useEffect(() => {
     getPatientsHistory();
   }, []);
