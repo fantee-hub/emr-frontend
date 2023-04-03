@@ -49,9 +49,9 @@ const CustomizedListItem = ({ patient, doctorsList }) => {
     event.preventDefault();
     setIsSending(true);
     const doctorList = getSelectedDoctorInfo(staffName, doctorsList);
-
+    console.log(doctorList);
     const patient = patientId;
-    const doctor = doctorList.staff_id;
+    const doctor = doctorList.id;
     const requestData = { patient, doctor };
 
     console.log(requestData);
