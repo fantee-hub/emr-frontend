@@ -25,9 +25,9 @@ function ApprovePayment({ user, amount, labTests }) {
       return labTests.map((tests) =>
         httpService.patch(approvePaymentUrl(tests._id), {
           type:
-            tests.drugId.type === 'drug'
+            tests.drugId && tests.drugId.type === 'drug'
               ? 'prescription'
-              : tests.test.type === 'test'
+              : !tests.drugId && tests.test.type === 'test'
               ? 'lab'
               : tests.test.type
         })
