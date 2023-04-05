@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { CircularProgress, Divider, Grid } from '@material-ui/core';
-// import { Circle } from '@mui/icons-material';
+import { Circle } from '@mui/icons-material';
 import { MdSick } from 'react-icons/md';
 
 import React, { useEffect, useState } from 'react';
@@ -21,7 +21,8 @@ function SymptomsHistory({ user, sessionId, patientId }) {
     }
     try {
       const { data } = await getSessionSymptoms(sessionId, requestData);
-      console.log(data);
+      // const filterSymptom = data.data.symptoms.filter((symp) => symp.symptom !== undefined);
+      // console.log(filterSymptom);
       setIsLoading(false);
       if (data) {
         setSymptoms(data.data);
@@ -72,28 +73,30 @@ function SymptomsHistory({ user, sessionId, patientId }) {
           symptoms &&
           symptoms.symptoms &&
           symptoms.symptoms.length &&
-          symptoms.symptoms.map((item, index) => {
-            const { note } = item;
-            console.log(symptoms.symptoms[symptoms.symptoms.length - 1]);
-            return (
-              <>
-                <Grid key={index} container spacing={2} style={{ padding: 8 }}>
-                  {/* <Grid item xs={6}>
-                    <div className="flex flex-row items-center">
-                      <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
-                      {item.symptom.title}
-                    </div>
-                  </Grid> */}
-                  <Grid item xs={6}>
-                    {note}
+          symptoms.symptoms
+            .filter((symp) => symp.symptom !== undefined)
+            .map((item, index) => {
+              const { symptom } = item;
+              console.log(symptoms.symptoms[symptoms.symptoms.length - 1]);
+              return (
+                <>
+                  <Grid key={index} container spacing={2} style={{ padding: 8 }}>
+                    <Grid item xs={6}>
+                      <div className="flex flex-row items-center">
+                        <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
+                        {symptom.title}
+                      </div>
+                    </Grid>
+                    <Grid item xs={6}>
+                      {symptom.description}
+                    </Grid>
                   </Grid>
-                </Grid>
-                {index !== symptoms.length - 1 ? (
-                  <Divider variant="fullWidth" orientation="horizontal" />
-                ) : null}
-              </>
-            );
-          })
+                  {index !== symptoms.length - 1 ? (
+                    <Divider variant="fullWidth" orientation="horizontal" />
+                  ) : null}
+                </>
+              );
+            })
         )}
       </div>
       <div className=" mt-10 mb-10 w-full border-4 border-solid border-green-500"></div>

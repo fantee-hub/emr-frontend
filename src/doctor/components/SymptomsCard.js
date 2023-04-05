@@ -15,9 +15,9 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, 
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
-  console.log(symptom, symptoms);
-  const symptomId = symptoms.data.filter((symp) => symp.title === symptom);
 
+  const symptomId = symptoms.data.filter((symp) => symp.title === symptom);
+  console.log(symptomId, symptoms);
   const { description } = inputData;
 
   const onSubmitForm = async (event) => {
@@ -30,11 +30,12 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, 
       // const title = symptom;
 
       const note = description;
-      const symptom = symptomId._id;
+      const symptom = symptomId[0]._id;
       const doctor = user.data.staff_id;
       const sessionID = sessionId;
       const patient = patientId;
       const requestBody = { symptom, note, patient, doctor, sessionID };
+      console.log(requestBody);
       const { data } = await addPatientSymptom(requestBody);
       console.log(data);
       setIsLoading(false);
@@ -66,7 +67,7 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, 
 
 export default function SymptomCard({ sessionId, patientId, symptomsList }) {
   const [choice, setChoice] = useState([]);
-  console.log(symptomsList);
+  // console.log(symptomsList);
   const [inputData, setInputData] = useState({
     title: '',
     description: ''
@@ -88,7 +89,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
       setChoice([...filterdArr]);
     }
   };
-  console.log(choice);
+  // console.log(choice);
 
   return (
     <Paper sx={{ flexGrow: 1 }} className="p-3">

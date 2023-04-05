@@ -30,12 +30,13 @@ function DiagnosisForm({
     setIsLoading(true);
     // const title = diagnosis;
     const note = description;
-    const diagnosis = diagnosisId._id;
+    const diagnosis = diagnosisId[0]._id;
     const doctor = user.data.staff_id;
     const sessionID = sessionId;
     const patient = patientId;
 
     const requestBody = { note, diagnosis, sessionID, patient, doctor };
+    console.log(requestBody);
 
     if (user) {
       setAuthToken(user.token);
