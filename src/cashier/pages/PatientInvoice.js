@@ -187,6 +187,7 @@ function PatientInvoice() {
                     ? prescription
                     : prescription[prescription.length - 1]._id
                 }
+                labTests={prescription && !prescription.length ? prescription : prescription}
               />
             </div>
           </Paper>
@@ -239,6 +240,7 @@ function PatientInvoice() {
                 patientId={patientId}
                 types={tests && !tests.length ? tests : tests[tests.length - 1].test.type}
                 labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
+                labTests={tests && !tests.length ? tests : tests}
               />
             </div>
           </Paper>

@@ -52,7 +52,7 @@ function PrescriptionHistory({ prescription, isLoading }) {
           prescription.prescription &&
           prescription.prescription.length &&
           prescription.prescription.map((item, index) => {
-            const { quantity, note, days, drugId } = item;
+            const { quantity, note, days, drugId, doctor } = item;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
@@ -71,9 +71,9 @@ function PrescriptionHistory({ prescription, isLoading }) {
                   <Grid item xs={4}>
                     {note}
                   </Grid>
-                  {/* <Grid item xs={2} style={{ color: '#808080' }}>
+                  <Grid item xs={2} style={{ color: '#808080' }}>
                     {doctor.fullName}
-                  </Grid> */}
+                  </Grid>
                 </Grid>
                 {index !== prescription.prescription.length - 1 ? (
                   <Divider variant="fullWidth" orientation="horizontal" />
