@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { CircularProgress, Divider, Grid } from '@material-ui/core';
-// import { Circle } from '@mui/icons-material';
+import { Circle } from '@mui/icons-material';
 import { FaDiagnoses } from 'react-icons/fa';
 
 import React, { useEffect, useState } from 'react';
@@ -68,27 +68,31 @@ function DiagnosisHistory({ user, sessionId }) {
         ) : (
           diagnosis &&
           diagnosis.diagnosis &&
-          diagnosis.diagnosis.map((item, index) => {
-            const { note } = item;
-            return (
-              <>
-                <Grid key={index} container spacing={2} style={{ padding: 8 }}>
-                  {/* <Grid item xs={6}>
-                    <div className="flex flex-row items-center">
-                      <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
-                      {title}
-                    </div>
-                  </Grid> */}
-                  <Grid item xs={6}>
-                    {note}
+          diagnosis.diagnosis.length &&
+          diagnosis.diagnosis
+            .filter((diagnose) => diagnose.diagnosis !== undefined)
+            .map((item, index) => {
+              const { diagnosis } = item;
+              console.log(item);
+              return (
+                <>
+                  <Grid key={index} container spacing={2} style={{ padding: 8 }}>
+                    <Grid item xs={6}>
+                      <div className="flex flex-row items-center">
+                        <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
+                        {diagnosis.title}
+                      </div>
+                    </Grid>
+                    <Grid item xs={6}>
+                      {diagnosis.description}
+                    </Grid>
                   </Grid>
-                </Grid>
-                {index !== diagnosis.diagnosis.length - 1 ? (
-                  <Divider variant="fullWidth" orientation="horizontal" />
-                ) : null}
-              </>
-            );
-          })
+                  {index !== diagnosis.length - 1 ? (
+                    <Divider variant="fullWidth" orientation="horizontal" />
+                  ) : null}
+                </>
+              );
+            })
         )}
       </div>
       <div className=" mt-10 mb-10 w-full border-4 border-solid border-green-500"></div>
