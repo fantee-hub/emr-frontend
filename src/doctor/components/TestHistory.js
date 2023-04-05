@@ -51,6 +51,7 @@ function TestHistory({ tests, isLoading }) {
           tests.lab.length &&
           tests.lab.map((item, index) => {
             const { name, description } = item.test;
+            const { fullName } = item.doctor;
             return (
               <>
                 <Grid key={index} container spacing={2} style={{ padding: 8 }}>
@@ -69,9 +70,10 @@ function TestHistory({ tests, isLoading }) {
                   <Grid item xs={4}>
                     {resultDescription}
                   </Grid>
+                  */}
                   <Grid item xs={2} style={{ color: '#808080' }}>
-                    {doctor.fullName}
-                  </Grid> */}
+                    {fullName}
+                  </Grid>
                 </Grid>
                 {index !== tests.lab.length - 1 ? (
                   <Divider variant="fullWidth" orientation="horizontal" />
