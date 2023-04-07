@@ -74,7 +74,7 @@ function SymptomsHistory({ user, sessionId, patientId }) {
           symptoms.symptoms &&
           symptoms.symptoms.length &&
           symptoms.symptoms
-            .filter((symp) => symp.symptom !== undefined)
+            .filter((symp) => symp.symptom !== undefined && symp.description)
             .map((item, index) => {
               const { symptom } = item;
               console.log(symptoms.symptoms[symptoms.symptoms.length - 1]);
@@ -88,7 +88,7 @@ function SymptomsHistory({ user, sessionId, patientId }) {
                       </div>
                     </Grid>
                     <Grid item xs={6}>
-                      {symptom.description}
+                      {item.description}
                     </Grid>
                   </Grid>
                   {index !== symptoms.length - 1 ? (
