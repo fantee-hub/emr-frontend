@@ -23,10 +23,20 @@ function PharmacistHome() {
     }
     try {
       const { data } = await getApprovedPayments();
+      // check for duplicates
+      const uniqueArray = [];
+      const ids = [];
+      data.data.forEach((obj) => {
+        if (!ids.includes(obj.patient._id)) {
+          uniqueArray.push(obj);
+          ids.push(obj.patient._id);
+        }
+      });
+      console.log(uniqueArray);
       console.log(data);
       setIsLoading(false);
       if (data) {
-        setPayments(data.data);
+        setPayments(uniqueArray);
       }
     } catch (error) {
       setIsLoading(false);

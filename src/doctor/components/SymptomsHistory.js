@@ -74,7 +74,7 @@ function SymptomsHistory({ user, sessionId, patientId }) {
           symptoms.symptoms &&
           symptoms.symptoms.length &&
           symptoms.symptoms
-            .filter((symp) => symp.symptom !== undefined && symp.description)
+            .filter((symp) => symp.symptom)
             .map((item, index) => {
               const { symptom } = item;
               console.log(symptoms.symptoms[symptoms.symptoms.length - 1]);

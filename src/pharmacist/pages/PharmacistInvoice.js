@@ -19,6 +19,7 @@ import {
   getPrescriptionBySession
 } from '../../utils/api';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
+import httpService from '../../utils/axios';
 
 import { toast } from 'react-toastify';
 import { CircularProgress } from '@material-ui/core';
@@ -38,6 +39,7 @@ const drugHeaders = [
   'Amount'
 ];
 const testHeaders = ['Index', 'Title', 'Description', 'Amount'];
+
 function PharmacistInvoice() {
   const user = useCurrentUser();
   const navigate = useNavigate();
@@ -48,6 +50,16 @@ function PharmacistInvoice() {
   const [isApproving, setIsApproving] = useState(false);
 
   const classes = useStyles();
+
+  const confirmDrugDisperalUrl = (id) => {
+    return `/prescriptions/disperse/${id}`;
+  };
+
+  const getDrugIds = () => {
+    if (rows) {
+      return rows.map((drugs) => httpService.patch(confirmDrugDisperalUrl(drugs._id)));
+    }
+  };
 
   const getPatientsApprovedInvoice = async () => {
     setIsLoading(true);
@@ -78,12 +90,14 @@ function PharmacistInvoice() {
     try {
       const type = 'P';
       // const requestData = { paymentId, type };
-      const { data } = await dispersePrescription(rows[rows.length - 1]._id);
+      const { data } = await Promise.all(getDrugIds());
+      console.log(data);
       setIsApproving(false);
-      toast.success(data.data.message);
+      toast.success('Dispersed successful');
       navigate(`/pharmacist`);
     } catch (error) {
       setIsApproving(false);
+      console.log(error);
       toast.error('an error occured');
     }
   };

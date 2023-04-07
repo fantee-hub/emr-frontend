@@ -13,6 +13,7 @@ function DiagnosisForm({
   diagnosis,
   handleChange,
   inputData,
+  setInputData,
   sessionId,
   patientId,
   diagnosisList
@@ -43,6 +44,7 @@ function DiagnosisForm({
     }
     try {
       await addPatientDiagnosis(requestBody);
+      setInputData({ description: '' });
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
@@ -121,6 +123,7 @@ function DiagnosisCard({ sessionId, patientId, diagnosisList }) {
                       diagnosis={c}
                       handleChange={handleChange}
                       inputData={inputData}
+                      setInputData={setInputData}
                       sessionId={sessionId}
                       patientId={patientId}
                       diagnosisList={diagnosisList}
