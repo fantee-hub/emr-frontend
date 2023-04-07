@@ -72,7 +72,7 @@ function DiagnosisHistory({ user, sessionId }) {
           diagnosis.diagnosis
             .filter((diagnose) => diagnose.diagnosis !== undefined)
             .map((item, index) => {
-              const { diagnosis } = item;
+              const { diagnosis, note } = item;
               console.log(item);
               return (
                 <>
@@ -84,7 +84,7 @@ function DiagnosisHistory({ user, sessionId }) {
                       </div>
                     </Grid>
                     <Grid item xs={6}>
-                      {diagnosis.description}
+                      {note}
                     </Grid>
                   </Grid>
                   {index !== diagnosis.length - 1 ? (

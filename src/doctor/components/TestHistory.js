@@ -49,38 +49,40 @@ function TestHistory({ tests, isLoading }) {
           tests &&
           tests.lab &&
           tests.lab.length &&
-          tests.lab.map((item, index) => {
-            const { name, description } = item.test;
-            const { fullName } = item.doctor;
-            return (
-              <>
-                <Grid key={index} container spacing={2} style={{ padding: 8 }}>
-                  <Grid item xs={2}>
-                    <div className="flex flex-row items-center">
-                      <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
-                      {name}
-                    </div>
+          tests.lab
+            .filter((test) => test.test !== undefined && test.description)
+            .map((item, index) => {
+              const { name, result, resultDescription } = item.test;
+              const { fullName } = item.doctor;
+              return (
+                <>
+                  <Grid key={index} container spacing={2} style={{ padding: 8 }}>
+                    <Grid item xs={2}>
+                      <div className="flex flex-row items-center">
+                        <Circle sx={{ color: 'rgb(34 197 94)', fontSize: '12px', mr: 1 }} />
+                        {name}
+                      </div>
+                    </Grid>
+                    <Grid item xs={2}>
+                      {item.description}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {result}
+                    </Grid>
+                    <Grid item xs={4}>
+                      {resultDescription}
+                    </Grid>
+
+                    <Grid item xs={2} style={{ color: '#808080' }}>
+                      {fullName}
+                    </Grid>
                   </Grid>
-                  <Grid item xs={2}>
-                    {description}
-                  </Grid>
-                  {/* <Grid item xs={2}>
-                    {result}
-                  </Grid>
-                  <Grid item xs={4}>
-                    {resultDescription}
-                  </Grid>
-                  */}
-                  <Grid item xs={2} style={{ color: '#808080' }}>
-                    {fullName}
-                  </Grid>
-                </Grid>
-                {index !== tests.lab.length - 1 ? (
-                  <Divider variant="fullWidth" orientation="horizontal" />
-                ) : null}
-              </>
-            );
-          })
+                  {index !== tests.lab.length - 1 ? (
+                    <Divider variant="fullWidth" orientation="horizontal" />
+                  ) : null}
+                </>
+              );
+            })
         )}
       </div>
       <div className=" mt-10 mb-10 w-full border-4 border-solid border-green-500"></div>

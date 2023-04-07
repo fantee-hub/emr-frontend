@@ -34,7 +34,7 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, 
       const doctor = user.data.staff_id;
       const sessionID = sessionId;
       const patient = patientId;
-      const requestBody = { symptom, note, patient, doctor, sessionID };
+      const requestBody = { symptom, note, description, patient, doctor, sessionID };
       console.log(requestBody);
       const { data } = await addPatientSymptom(requestBody);
       console.log(data);
