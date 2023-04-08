@@ -181,6 +181,9 @@ export const getApprovedPayments = () => {
 export const getPendingLab = () => {
   return httpService.get(LabUrl + '/pending-test');
 };
+export const getPendingTest = (patientId) => {
+  return httpService.get(LabUrl + '/pending-test/' + patientId);
+};
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
 };

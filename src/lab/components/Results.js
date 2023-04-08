@@ -15,7 +15,7 @@ function Results({ role, testId, title, description }) {
     result: '',
     resultDescription: ''
   });
-  const { result } = resultValue;
+  const { result, resultDescription } = resultValue;
 
   const [isAddingTest, setIsAddingTest] = useState(false);
 
@@ -32,7 +32,12 @@ function Results({ role, testId, title, description }) {
     event.preventDefault();
     setIsAddingTest(true);
     const id = testId;
-    const requestData = { result };
+    const requestData = {
+      result: {
+        result,
+        description: resultDescription
+      }
+    };
     if (user) {
       setAuthToken(user.token);
     }
