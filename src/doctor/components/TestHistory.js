@@ -9,6 +9,13 @@ function TestHistory({ tests, isLoading }) {
   const date = tests && tests.lab ? new Date(tests.session.createdAt).toDateString() : 'N/A';
   const sessionStatus = tests && tests.lab ? tests.session.status : 'N/A';
   console.log(tests);
+  const calcTotalTestsAmount = (tests) => {
+    return (
+      tests &&
+      tests.map((item) => item.test.price).reduce((prev, curr) => prev + curr, 0)
+    );
+  };
+  const grandTotalTests = tests && tests.lab ? calcTotalTestsAmount(tests.lab) : 0;
 
   return (
     <div className="p-10">
@@ -50,9 +57,12 @@ function TestHistory({ tests, isLoading }) {
           tests.lab &&
           tests.lab.length &&
           tests.lab
-            .filter((test) => test.test !== undefined && test.description)
+            .filter((test) => test.test && test.description)
             .map((item, index) => {
-              const { name, result, resultDescription } = item.test;
+              const { name } = item.test;
+              const { result, description } = item.result
+                ? item.result
+                : { result: '', description: '' };
               const { fullName } = item.doctor;
               return (
                 <>
@@ -70,7 +80,7 @@ function TestHistory({ tests, isLoading }) {
                       {result}
                     </Grid>
                     <Grid item xs={4}>
-                      {resultDescription}
+                      {description}
                     </Grid>
 
                     <Grid item xs={2} style={{ color: '#808080' }}>
@@ -85,6 +95,9 @@ function TestHistory({ tests, isLoading }) {
             })
         )}
       </div>
+      <p className="flex self-end text-lg font-bold">
+        Total:&nbsp; <span>&#8358;</span> {grandTotalTests.toLocaleString()}
+      </p>
       <div className=" mt-10 mb-10 w-full border-4 border-solid border-green-500"></div>
     </div>
   );

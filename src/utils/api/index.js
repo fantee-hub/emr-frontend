@@ -125,6 +125,12 @@ export const getBySessionId = (sessionId, data) => {
 export const getSessionByPatientId = (patient) => {
   return httpService.get(SessionUrl + '/patient', { params: { patient } });
 };
+export const getPaidPrescription = (patientId) => {
+  return httpService.get(PrescriptionUrl + patient + '/' + patientId);
+};
+export const patientHistory = (session) => {
+  return httpService.get('/history', { params: { session } });
+};
 
 export const addToDiagnosisList = (data) => {
   return httpService.post(StaffUrl + DiagnosisUrl, data);

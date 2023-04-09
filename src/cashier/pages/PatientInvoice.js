@@ -215,12 +215,12 @@ function PatientInvoice() {
                     tests
                       .filter((test) => !test.paid)
                       .map((test, index) => {
-                        const { name, description, price } = test.test;
+                        const { name, price } = test.test;
                         return (
                           <TableRow key={index}>
                             <TableCell align="center">{index + 1}</TableCell>
                             <TableCell align="center">{name}</TableCell>
-                            <TableCell align="center">{description}</TableCell>
+                            <TableCell align="center">{test.description}</TableCell>
                             <TableCell align="center">{price}</TableCell>
                           </TableRow>
                         );

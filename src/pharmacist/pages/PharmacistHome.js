@@ -24,19 +24,19 @@ function PharmacistHome() {
     try {
       const { data } = await getApprovedPayments();
       // check for duplicates
-      const uniqueArray = [];
-      const ids = [];
-      data.data.forEach((obj) => {
-        if (!ids.includes(obj.patient._id)) {
-          uniqueArray.push(obj);
-          ids.push(obj.patient._id);
-        }
-      });
-      console.log(uniqueArray);
+      // const uniqueArray = [];
+      // const ids = [];
+      // data.data.forEach((obj) => {
+      //   if (!ids.includes(obj.patient._id)) {
+      //     uniqueArray.push(obj);
+      //     ids.push(obj.patient._id);
+      //   }
+      // });
+      // console.log(uniqueArray);
       console.log(data);
       setIsLoading(false);
       if (data) {
-        setPayments(uniqueArray);
+        setPayments(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -72,20 +72,18 @@ function PharmacistHome() {
                 </p>
               ) : (
                 payments &&
-                payments
-                  .filter((payment) => payment.paid)
-                  .map((payment, key) => {
-                    const { patient, sessionID, _id } = payment;
-                    return (
-                      <li key={key}>
-                        <Link
-                          to={`/approved-invoice/${patient._id}/${sessionID}/${_id}`}
-                          style={{ textDecoration: 'none' }}>
-                          {patient.name}
-                        </Link>
-                      </li>
-                    );
-                  })
+                payments.map((payment, key) => {
+                  const { name, sessionID, _id } = payment;
+                  return (
+                    <li key={key}>
+                      <Link
+                        to={`/approved-invoice/${_id}/${sessionID}/${_id}`}
+                        style={{ textDecoration: 'none' }}>
+                        {name}
+                      </Link>
+                    </li>
+                  );
+                })
               )}
             </ol>
           </Paper>

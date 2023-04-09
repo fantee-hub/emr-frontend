@@ -16,7 +16,8 @@ import setAuthToken from '../../utils/setAuthToken';
 import {
   getApprovedPaymentsForPatient,
   dispersePrescription,
-  getPrescriptionBySession
+  getPrescriptionBySession,
+  getPaidPrescription
 } from '../../utils/api';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
 import httpService from '../../utils/axios';
@@ -67,12 +68,12 @@ function PharmacistInvoice() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getPrescriptionBySession(sessionId);
-      const prescriptionData = data.data.prescription.filter((res) => res.drugId !== null);
+      const { data } = await getPaidPrescription(patientId);
+      // const prescriptionData = data.data.prescription.filter((res) => res.drugId !== null);
       setIsLoading(false);
       if (data) {
-        setRows(prescriptionData);
-        console.log(prescriptionData);
+        setRows(data.data);
+        console.log(data);
       }
     } catch (error) {
       setIsLoading(false);
