@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { useCurrentUser } from '../../utils/hooks';
 import { useNavigate, useParams } from 'react-router';
 import setAuthToken from '../../utils/setAuthToken';
-import { getLabBySession } from '../../utils/api';
+import { getPendingTest } from '../../utils/api';
 import { CircularProgress } from '@material-ui/core';
 // import { Link } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ function LabTests() {
   const user = useCurrentUser();
   const navigate = useNavigate();
 
-  const { sessionId } = useParams();
+  const { patientId } = useParams();
 
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,12 +41,12 @@ function LabTests() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getLabBySession(sessionId);
-      const labData = data.data.lab.filter((res) => res.test !== undefined && res.test !== null);
+      const { data } = await getPendingTest(patientId);
+      // const labData = data.data.lab.filter((res) => res.test !== undefined && res.test !== null);
       setIsLoading(false);
       if (data) {
-        setRows(labData);
-        console.log(labData);
+        setRows(data.data);
+        console.log(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -106,15 +106,15 @@ function LabTests() {
                       rows
                         .filter((item) => item.paid)
                         .map((item, index) => {
-                          const { name, description, price } = item.test;
+                          const { name, price } = item.test;
                           return (
                             <TableRow
                               key={index}
                               className="cursor-pointer hover:bg-slate-200"
-                              onClick={() => handleRowClick(item._id, name, description)}>
+                              onClick={() => handleRowClick(item._id, name, item.description)}>
                               <TableCell align="center">{index + 1}</TableCell>
                               <TableCell align="center">{name}</TableCell>
-                              <TableCell align="center">{description}</TableCell>
+                              <TableCell align="center">{item.description}</TableCell>
                               <TableCell align="center">{price}</TableCell>
                             </TableRow>
                           );

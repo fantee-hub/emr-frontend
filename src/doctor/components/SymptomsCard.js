@@ -10,7 +10,15 @@ import TransformButton from '../../common-components/TransformButton';
 import { useCurrentUser } from '../../utils/hooks';
 
 // eslint-disable-next-line no-unused-vars
-function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, symptoms }) {
+function SymptomsForm({
+  symptom,
+  handleChange,
+  inputData,
+  setInputData,
+  sessionId,
+  patientId,
+  symptoms
+}) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +45,7 @@ function SymptomsForm({ symptom, handleChange, inputData, sessionId, patientId, 
       const requestBody = { symptom, note, description, patient, doctor, sessionID };
       console.log(requestBody);
       const { data } = await addPatientSymptom(requestBody);
+      setInputData({ description: '' });
       console.log(data);
       setIsLoading(false);
       setIsSuccessful(true);
@@ -113,6 +122,7 @@ export default function SymptomCard({ sessionId, patientId, symptomsList }) {
                       symptom={c}
                       handleChange={handleChange}
                       inputData={inputData}
+                      setInputData={setInputData}
                       sessionId={sessionId}
                       patientId={patientId}
                       symptoms={symptomsList}

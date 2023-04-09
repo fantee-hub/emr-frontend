@@ -12,6 +12,20 @@ function PrescriptionHistory({ prescription, isLoading }) {
       : 'N/A';
   const sessionStatus =
     prescription && prescription.prescription ? prescription.session.status : 'N/A';
+
+  const calcTotalPrescriptionAmount = (prescription) => {
+    return (
+      prescription &&
+      prescription.length &&
+      prescription
+        .map((item) => item.quantity * item.drugId.price)
+        .reduce((prev, curr) => prev + curr, 0)
+    );
+  };
+  const grandTotalPrescription =
+    prescription && prescription.prescription
+      ? calcTotalPrescriptionAmount(prescription.prescription)
+      : 0;
   return (
     <div className="p-10">
       <div className="flex flex-row items-center">
@@ -83,6 +97,9 @@ function PrescriptionHistory({ prescription, isLoading }) {
           })
         )}
       </div>
+      <p className="flex self-end text-lg font-bold">
+        Total:&nbsp; <span>&#8358;</span> {grandTotalPrescription.toLocaleString()}
+      </p>
       <div className=" mt-10 mb-10 w-full border-4 border-solid border-green-500"></div>
     </div>
   );

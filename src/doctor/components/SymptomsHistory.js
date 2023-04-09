@@ -4,7 +4,7 @@ import { Circle } from '@mui/icons-material';
 import { MdSick } from 'react-icons/md';
 
 import React, { useEffect, useState } from 'react';
-import { getSessionSymptoms } from '../../utils/api';
+import { getSessionSymptoms, patientHistory } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 
 function SymptomsHistory({ user, sessionId, patientId }) {
@@ -21,6 +21,8 @@ function SymptomsHistory({ user, sessionId, patientId }) {
     }
     try {
       const { data } = await getSessionSymptoms(sessionId, requestData);
+      const res = await patientHistory(sessionId);
+      console.log(res.data);
       // const filterSymptom = data.data.symptoms.filter((symp) => symp.symptom !== undefined);
       // console.log(filterSymptom);
       setIsLoading(false);
@@ -74,7 +76,7 @@ function SymptomsHistory({ user, sessionId, patientId }) {
           symptoms.symptoms &&
           symptoms.symptoms.length &&
           symptoms.symptoms
-            .filter((symp) => symp.symptom !== undefined && symp.description)
+            .filter((symp) => symp.symptom)
             .map((item, index) => {
               const { symptom } = item;
               console.log(symptoms.symptoms[symptoms.symptoms.length - 1]);

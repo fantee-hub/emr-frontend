@@ -22,11 +22,22 @@ function LabHome() {
     }
     try {
       const { data } = await getPendingLab();
+      console.log(data);
       setIsLoading(false);
-      const filterPatient = data.data.filter((res) => res.test !== undefined && res.test !== null);
+      // const filterPatient = data.data.filter((res) => res.test);
+      // // check for duplicates
+      // const uniqueArray = [];
+      // const ids = [];
+      // filterPatient.forEach((obj) => {
+      //   if (!ids.includes(obj.patient._id)) {
+      //     uniqueArray.push(obj);
+      //     ids.push(obj.patient._id);
+      //   }
+      // });
+      // console.log(uniqueArray);
       if (data) {
-        setPayments(filterPatient);
-        console.log(filterPatient);
+        setPayments(data.data);
+        // console.log(filterPatient);
       }
     } catch (error) {
       setIsLoading(false);
@@ -62,20 +73,18 @@ function LabHome() {
                 </p>
               ) : (
                 payments &&
-                payments
-                  .filter((payment) => payment.paid)
-                  .map((payment, key) => {
-                    const { patient, sessionID } = payment;
-                    return (
-                      <li key={key}>
-                        <Link
-                          to={`/lab-tests/${patient._id}/${sessionID}`}
-                          style={{ textDecoration: 'none' }}>
-                          {patient.name}
-                        </Link>
-                      </li>
-                    );
-                  })
+                payments.map((payment, key) => {
+                  const { name, _id, sessionID } = payment;
+                  return (
+                    <li key={key}>
+                      <Link
+                        to={`/lab-tests/${_id}/${sessionID}`}
+                        style={{ textDecoration: 'none' }}>
+                        {name}
+                      </Link>
+                    </li>
+                  );
+                })
               )}
             </ol>
           </Paper>

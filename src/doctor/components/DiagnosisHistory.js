@@ -70,7 +70,7 @@ function DiagnosisHistory({ user, sessionId }) {
           diagnosis.diagnosis &&
           diagnosis.diagnosis.length &&
           diagnosis.diagnosis
-            .filter((diagnose) => diagnose.diagnosis !== undefined)
+            .filter((diagnose) => diagnose.diagnosis)
             .map((item, index) => {
               const { diagnosis, note } = item;
               console.log(item);
