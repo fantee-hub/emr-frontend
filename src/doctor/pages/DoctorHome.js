@@ -17,9 +17,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import PatientsPersonalPage from './PatientsPersonalPage';
-import { getReceivedQueues, updateOnlineStatus } from '../../utils/api';
+import { getReceivedQueues, updateOnlineStatus, getPatientResult } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
+import DeleteDialog from '../components/DeleteDialog';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   table: {
@@ -28,6 +30,7 @@ const useStyles = makeStyles({
 });
 
 const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB'];
+const resultHeaders = ['Index', 'Test Result For', 'Conclude Test'];
 
 function DoctorHome() {
   const classes = useStyles();
@@ -35,13 +38,14 @@ function DoctorHome() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [patientsList, setPatientsList] = useState([]);
+  const navigate = useNavigate();
   const [isDoctorAvailable, setIsDoctorAvailable] = useState(
     JSON.parse(localStorage.getItem('isDoctorAvailable')) ?? false
   );
   const [availableDoctors, setAvailableDoctors] = useState(
     JSON.parse(localStorage.getItem('availableDoctors')) ?? []
   );
-
+  const [patientLabTest, setPatientLabTest] = useState([]);
   const filterData = (query, patientsList) => {
     let terms = query.split(' ');
     return patientsList.filter((object) =>
@@ -51,6 +55,21 @@ function DoctorHome() {
         )
       )
     );
+  };
+  const handlePatientNameClick = (id) => {
+    navigate(`/history/${id}`);
+  };
+
+  const patientWithUploadedResults = async () => {
+    try {
+      const { data } = await getPatientResult();
+      console.log(data);
+      if (data) {
+        setPatientLabTest(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const patientsFromReceptionist = async () => {
@@ -108,6 +127,7 @@ function DoctorHome() {
 
   useEffect(() => {
     patientsFromReceptionist();
+    patientWithUploadedResults();
   }, []);
   return (
     <div>
@@ -138,7 +158,10 @@ function DoctorHome() {
           <p className="text-sm mt-[-2px]">Incoming patients</p>
         </section>
       </div>
-      <section className="flex flex-row justify-center items-center">
+
+      <section
+        className="flex mb-4 flex-row justify-center items-center"
+        style={{ margin: '3rem 0' }}>
         {patientsList ? (
           <TableContainer component={Paper} style={{ width: '90vw' }}>
             <Table className={classes.table} aria-label="simple table">
@@ -175,6 +198,57 @@ function DoctorHome() {
                           <TableCell align="center">{data.patient.email}</TableCell>
                           <TableCell align="center">{data.patient.phoneNumber}</TableCell>
                           <TableCell align="center">{dob}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+        ) : null}
+      </section>
+
+      <section className="flex flex-row justify-center items-center px-3">
+        {patientLabTest ? (
+          <TableContainer component={Paper} style={{ width: '90vw' }}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {resultHeaders.map((header, key) => {
+                    return (
+                      <TableCell key={key} align="center" className="bg-green-500">
+                        {header}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              {!patientLabTest.length ? (
+                <h1 className="text-lg mb-3 text-red-500">Patient list is empty.</h1>
+              ) : (
+                <TableBody>
+                  {patientLabTest &&
+                    patientLabTest.map((data, index) => {
+                      return (
+                        <TableRow
+                          key={index}
+                          style={{ textDecoration: 'none' }}
+                          className="hover:shadow-md hover:bg-slate-50">
+                          <TableCell align="center">{index + 1}</TableCell>
+
+                          <TableCell
+                            align="center"
+                            onClick={() => handlePatientNameClick(data.sessionID)}
+                            className="cursor-pointer hover:shadow-md underline decoration-orange-500">
+                            {data.patient.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            <DeleteDialog
+                              id={data._id}
+                              item={data.patient.name}
+                              getUpdatedList={() => patientWithUploadedResults()}
+                            />
+                          </TableCell>
                         </TableRow>
                       );
                     })}

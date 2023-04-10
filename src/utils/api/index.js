@@ -131,6 +131,12 @@ export const getPaidPrescription = (patientId) => {
 export const patientHistory = (session) => {
   return httpService.get('/history', { params: { session } });
 };
+export const getPatientResult = () => {
+  return httpService.get(LabUrl + '/done-tests');
+};
+export const concludeTest = (test) => {
+  return httpService.patch(LabUrl + '/conclude-test', null, { params: { test } });
+};
 
 export const addToDiagnosisList = (data) => {
   return httpService.post(StaffUrl + DiagnosisUrl, data);
