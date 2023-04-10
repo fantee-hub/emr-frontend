@@ -10,10 +10,7 @@ function TestHistory({ tests, isLoading }) {
   const sessionStatus = tests && tests.lab ? tests.session.status : 'N/A';
   console.log(tests);
   const calcTotalTestsAmount = (tests) => {
-    return (
-      tests &&
-      tests.map((item) => item.test.price).reduce((prev, curr) => prev + curr, 0)
-    );
+    return tests && tests.map((item) => item.test.price).reduce((prev, curr) => prev + curr, 0);
   };
   const grandTotalTests = tests && tests.lab ? calcTotalTestsAmount(tests.lab) : 0;
 
@@ -57,7 +54,7 @@ function TestHistory({ tests, isLoading }) {
           tests.lab &&
           tests.lab.length &&
           tests.lab
-            .filter((test) => test.test && test.description)
+            .filter((test) => test.test)
             .map((item, index) => {
               const { name } = item.test;
               const { result, description } = item.result

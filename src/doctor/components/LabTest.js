@@ -11,7 +11,15 @@ import { useCurrentUser } from '../../utils/hooks';
 // const drugs = JSON.parse(localStorage.getItem('drugsList'));
 // const user = JSON.parse(localStorage.getItem('user'));
 
-function LabTestForm({ test, handleChange, inputData, sessionId, patientId, testsList }) {
+function LabTestForm({
+  test,
+  handleChange,
+  inputData,
+  setInputData,
+  sessionId,
+  patientId,
+  testsList
+}) {
   const user = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +48,7 @@ function LabTestForm({ test, handleChange, inputData, sessionId, patientId, test
     }
     try {
       const { data } = await addNewTest(requestBody);
+      setInputData({ description: '' });
       console.log(data);
       setIsLoading(false);
       setIsSuccessful(true);
@@ -125,6 +134,7 @@ function LabTest({ sessionId, testsList, patientId }) {
                       test={c}
                       handleChange={handleTestFormChange}
                       inputData={testInputData}
+                      setInputData={setTestInputData}
                       sessionId={sessionId}
                       patientId={patientId}
                       testsList={testsList}

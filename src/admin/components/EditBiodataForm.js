@@ -28,7 +28,7 @@ function EditBiodataForm({
       setAuthToken(user.token);
     }
     try {
-      const requestData = { age, occupation, sex, address, genotype, bloodGroup };
+      const requestData = { age, occupation, sex, address, genotype, bloodGroup, registration };
       const patient_id = patientId;
       const { data } = await updatePatientBiodata(patient_id, requestData);
       console.log(data);
@@ -44,7 +44,7 @@ function EditBiodataForm({
 
   const { handleChange, values, handleSubmit } = useForm(handleUpdatePatientBio);
 
-  const { age, occupation, sex, address, genotype, bloodGroup } = values;
+  const { age, occupation, sex, address, genotype, bloodGroup, registration } = values;
 
   return (
     <>
