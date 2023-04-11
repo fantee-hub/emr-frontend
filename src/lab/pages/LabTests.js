@@ -59,7 +59,7 @@ function LabTests() {
     getPatientsApprovedInvoice();
   }, []);
   const handleRowClick = (id, title, description) => {
-    navigate(`/lab-results/${id}/${title}/${description}`);
+    navigate(`/lab-results/${id}/${title}/${!description ? '-' : description}`);
   };
   return (
     <>
