@@ -128,7 +128,7 @@ function DoctorHome() {
   useEffect(() => {
     patientsFromReceptionist();
     patientWithUploadedResults();
-  }, []);
+  }, [patientsList, patientLabTest]);
   return (
     <div>
       <div className="p-8">
