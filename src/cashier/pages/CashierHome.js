@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
-import { getAllStaff } from '../../utils/api';
+import { awaitingDoctors } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 
@@ -13,23 +13,23 @@ function CashierHome() {
   const user = useCurrentUser();
   const [doctors, setDoctors] = useState([]);
 
-  const getAvailableDoctors = (allStaff) => {
-    const allDoctors = allStaff.filter((staff) => staff.role === 'doctor');
-    setDoctors([...allDoctors]);
-    console.log(doctors);
-  };
+  // const getAvailableDoctors = (allStaff) => {
+  //   const allDoctors = allStaff.filter((staff) => staff.role === 'doctor');
+
+  //   console.log(doctors);
+  // };
 
   const getAllDoctors = async () => {
-    const page = 0;
-    const size = 20;
+    // const page = 0;
+    // const size = 20;
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getAllStaff(page, size);
+      const { data } = await awaitingDoctors();
       console.log(data);
       if (data) {
-        getAvailableDoctors(data.data);
+        setDoctors(data.data);
       }
     } catch (error) {
       console.log(error);
@@ -60,7 +60,7 @@ function CashierHome() {
               {doctors.map((doctor, key) => {
                 return (
                   <li key={key}>
-                    <Link to={`/doctor/${doctor.staff_id}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/doctor/${doctor._id}`} style={{ textDecoration: 'none' }}>
                       Dr. {doctor.fullName}
                     </Link>
                   </li>
