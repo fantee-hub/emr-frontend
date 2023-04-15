@@ -134,8 +134,8 @@ export const patientHistory = (session) => {
 export const getPatientResult = () => {
   return httpService.get(LabUrl + '/done-tests');
 };
-export const concludeTest = (test) => {
-  return httpService.patch(LabUrl + '/conclude-test', null, { params: { test } });
+export const concludeTest = (session) => {
+  return httpService.patch(LabUrl + '/conclude-test', null, { params: { session } });
 };
 
 export const addToDiagnosisList = (data) => {

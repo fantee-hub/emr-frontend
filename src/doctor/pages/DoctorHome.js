@@ -127,8 +127,11 @@ function DoctorHome() {
 
   useEffect(() => {
     patientsFromReceptionist();
+  }, [patientLabTest]);
+  useEffect(() => {
     patientWithUploadedResults();
-  }, [patientsList, patientLabTest]);
+  }, []);
+
   return (
     <div>
       <div className="p-8">
@@ -240,12 +243,12 @@ function DoctorHome() {
                             align="center"
                             onClick={() => handlePatientNameClick(data.sessionID)}
                             className="cursor-pointer hover:shadow-md underline decoration-orange-500">
-                            {data.patient.name}
+                            {data.name}
                           </TableCell>
                           <TableCell align="center">
                             <DeleteDialog
-                              id={data._id}
-                              item={data.patient.name}
+                              id={data.session}
+                              item={data.name}
                               getUpdatedList={() => patientWithUploadedResults()}
                             />
                           </TableCell>
