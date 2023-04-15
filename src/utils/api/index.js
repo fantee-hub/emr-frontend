@@ -137,6 +137,9 @@ export const getPatientResult = () => {
 export const concludeTest = (session) => {
   return httpService.patch(LabUrl + '/conclude-test', null, { params: { session } });
 };
+export const awaitingDoctors = () => {
+  return httpService.get(cashier + '/list');
+};
 
 export const addToDiagnosisList = (data) => {
   return httpService.post(StaffUrl + DiagnosisUrl, data);
