@@ -241,7 +241,7 @@ function DoctorHome() {
 
                           <TableCell
                             align="center"
-                            onClick={() => handlePatientNameClick(data.sessionID)}
+                            onClick={() => handlePatientNameClick(data.session)}
                             className="cursor-pointer hover:shadow-md underline decoration-orange-500">
                             {data.name}
                           </TableCell>
