@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   }
 });
 
-const headers = ['Index', 'Title', 'Description', 'Price'];
+const headers = ['Index', 'Title', 'Description'];
 
 function LabTests() {
   const classes = useStyles();
@@ -106,7 +106,7 @@ function LabTests() {
                       rows
                         .filter((item) => item.paid)
                         .map((item, index) => {
-                          const { name, price } = item.test;
+                          const { name } = item.test;
                           return (
                             <TableRow
                               key={index}
@@ -115,7 +115,6 @@ function LabTests() {
                               <TableCell align="center">{index + 1}</TableCell>
                               <TableCell align="center">{name}</TableCell>
                               <TableCell align="center">{item.description}</TableCell>
-                              <TableCell align="center">{price}</TableCell>
                             </TableRow>
                           );
                         })
