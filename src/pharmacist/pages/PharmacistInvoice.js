@@ -30,15 +30,7 @@ const useStyles = makeStyles({
     minWidth: 650
   }
 });
-const drugHeaders = [
-  'Index',
-  'Name',
-  'Quantity prescribed',
-  'Dosage period',
-  'Price',
-  'Note',
-  'Amount'
-];
+const drugHeaders = ['Index', 'Name', 'Quantity prescribed', 'Dosage period', 'Note', 'Amount'];
 const testHeaders = ['Index', 'Title', 'Description', 'Amount'];
 
 function PharmacistInvoice() {
@@ -160,9 +152,7 @@ function PharmacistInvoice() {
                               <TableCell align="center">{drugId.name}</TableCell>
                               <TableCell align="center">{quantity}</TableCell>
                               <TableCell align="center">{days} days</TableCell>
-                              <TableCell align="center">
-                                <span>&#8358; {drugId.price}</span>
-                              </TableCell>
+
                               <TableCell align="center">{note}</TableCell>
                               <TableCell align="center">
                                 <span>&#8358; {amount}</span>

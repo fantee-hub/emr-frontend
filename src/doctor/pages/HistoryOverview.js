@@ -33,7 +33,7 @@ function HistoryOverview() {
       console.log(data);
       if (data) {
         setHistoryList(history);
-        console.log(historyList);
+        console.log(history);
       }
     } catch (error) {
       toast.error(error.message);
