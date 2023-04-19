@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB'];
+const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB', 'Delete'];
 const resultHeaders = ['Index', 'Test Result For', 'Conclude Test'];
 
 function DoctorHome() {
@@ -58,6 +58,9 @@ function DoctorHome() {
   };
   const handlePatientNameClick = (id) => {
     navigate(`/history/${id}`);
+  };
+  const handleDoctorPatient = (id, patient, session) => {
+    navigate(`/patient/${id}/${patient}/${session}`);
   };
 
   const patientWithUploadedResults = async () => {
@@ -191,16 +194,27 @@ function DoctorHome() {
                       return (
                         <TableRow
                           key={index}
-                          component={Link}
-                          to={`/patient/${data.patient._id}/${data.patient.name}/${data.session}`}
                           style={{ textDecoration: 'none' }}
                           className="hover:shadow-md hover:bg-slate-50">
                           <TableCell align="center">{index + 1}</TableCell>
-
-                          <TableCell align="center">{data.patient.name}</TableCell>
+                          <TableCell
+                            align="center"
+                            onClick={() =>
+                              handleDoctorPatient(data.patient._id, data.patient.name, data.session)
+                            }>
+                            {data.patient.name}
+                          </TableCell>
                           <TableCell align="center">{data.patient.email}</TableCell>
                           <TableCell align="center">{data.patient.phoneNumber}</TableCell>
                           <TableCell align="center">{dob}</TableCell>
+                          <TableCell align="center">
+                            <DeleteDialog
+                              id={data.session}
+                              item={data.patient.name}
+                              getUpdatedList={() => patientsFromReceptionist()}
+                              deleteAction="doctorPatient"
+                            />
+                          </TableCell>
                         </TableRow>
                       );
                     })}
@@ -250,6 +264,7 @@ function DoctorHome() {
                               id={data.session}
                               item={data.name}
                               getUpdatedList={() => patientWithUploadedResults()}
+                              deleteAction="uploadedResult"
                             />
                           </TableCell>
                         </TableRow>

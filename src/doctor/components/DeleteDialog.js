@@ -12,9 +12,9 @@ import { Delete } from '@mui/icons-material';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
 
 import { DialogContent, DialogContentText } from '@material-ui/core';
-import { concludeTest } from '../../utils/api';
+import { concludeTest, deleteDoctorPaitent } from '../../utils/api';
 
-export default function DeleteDialog({ id, getUpdatedList, item }) {
+export default function DeleteDialog({ id, getUpdatedList, item, deleteAction }) {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -40,12 +40,13 @@ export default function DeleteDialog({ id, getUpdatedList, item }) {
     setIsLoading(true);
 
     try {
-      const { data } = await concludeTest(id);
+      const { data } =
+        deleteAction === 'doctorPatient' ? await deleteDoctorPaitent(id) : await concludeTest(id);
       setIsLoading(false);
       setOpen(false);
       getUpdatedList();
       console.log(data);
-      toast.success(data.data.message);
+      toast.success(data.data ? data.data.message : 'Deleted Successfully');
     } catch (error) {
       setIsLoading(false);
       toast.error(error.message);
