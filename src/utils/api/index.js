@@ -210,6 +210,9 @@ export const dispersePrescription = (prescriptionId) => {
 export const getDoctorPatient = (doctor) => {
   return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctor } });
 };
+export const deleteDoctorPaitent = (session) => {
+  return httpService.delete(sendQueueUrl + '/remove-patient', { params: session });
+};
 export const getPendingPayments = (patient) => {
   return httpService.get(cashier + '/pending', { params: { patient } });
 };
