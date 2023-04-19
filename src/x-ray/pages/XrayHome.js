@@ -6,7 +6,7 @@ import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPayments } from '../../utils/api';
+import { getPendingXray } from '../../utils/api';
 import { toast } from 'react-toastify';
 import { CircularProgress } from '@mui/material';
 
@@ -23,7 +23,7 @@ function XrayHome() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPayments();
+      const { data } = await getPendingXray();
       setIsLoading(false);
       if (data) {
         setPayments(data);
@@ -52,7 +52,7 @@ function XrayHome() {
         </div>
         <section>
           <Paper sx={{ width: '70vw' }} className="p-4">
-            <h3>Incoming approved payments</h3>
+            <h3>Incoming patients</h3>
             <ol>
               {isLoading ? (
                 <CircularProgress size={30} />
@@ -63,13 +63,13 @@ function XrayHome() {
               ) : (
                 payments &&
                 payments.map((payment, key) => {
-                  const { patientId, patient, sessionId } = payment;
+                  const { name, _id, sessionID } = payment;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/xray-tests/${patientId}/${sessionId}`}
+                        to={`/xray-tests/${_id}/${sessionID}`}
                         style={{ textDecoration: 'none' }}>
-                        {patient.name}
+                        {name}
                       </Link>
                     </li>
                   );
