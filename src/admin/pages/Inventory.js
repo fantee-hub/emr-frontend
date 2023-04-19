@@ -78,6 +78,7 @@ function Inventory() {
     }
     try {
       const { data } = await getAllInventoryItems(page, size);
+      console.log(data.data);
       setIsLoading(false);
       if (data) {
         setInventoryList(data.data);
@@ -114,7 +115,7 @@ function Inventory() {
     {
       name: 'type',
       id: 'type',
-      label: 'DRUG or TEST'
+      label: 'DRUG or TEST or XRAY'
     }
   ];
   return (
@@ -172,7 +173,7 @@ function Inventory() {
                           />
                         </TableCell>
                         <TableCell align="center">
-                        <DeleteDialog
+                          <DeleteDialog
                             id={row._id}
                             item={row.name}
                             getUpdatedList={() => getInventory()}
@@ -223,7 +224,65 @@ function Inventory() {
                         <TableCell align="center">{row.quantity}</TableCell>
                         <TableCell align="center">{row.price}</TableCell>
                         <TableCell align="center">
-                        <EditInventoryForm
+                          <EditInventoryForm
+                            selectedItem={row}
+                            getInventory={getInventory}
+                            rows={inventoryList}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <DeleteDialog
+                            id={row._id}
+                            item={row.name}
+                            getUpdatedList={() => getInventory()}
+                            role="inventory"
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </section>
+      <section>
+        {isLoading ? (
+          <CircularProgress size={30} />
+        ) : (
+          <TableContainer component={Paper} style={{ marginTop: 5 }}>
+            <h2 className="text-lg mb-3 pl-3">Xray</h2>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {headers.map((header, key) => {
+                    return (
+                      <TableCell key={key} align="center" className="bg-green-500">
+                        {header}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {!isLoading && !inventoryList.length ? (
+                  <tr>
+                    <td className="text-lg pl-3 mb-3 text-red-500">
+                      Xray list is empty. Enter details above to add to list
+                    </td>
+                  </tr>
+                ) : (
+                  inventoryList &&
+                  inventoryList
+                    .filter((row) => row.type === 'xray')
+                    .map((row, index) => (
+                      <TableRow key={row.name} className="odd:bg-white even:bg-slate-50">
+                        <TableCell align="center">{index + 1}</TableCell>
+                        <TableCell align="center">{row.name}</TableCell>
+                        <TableCell align="center">{row.quantity}</TableCell>
+                        <TableCell align="center">{row.price}</TableCell>
+                        <TableCell align="center">
+                          <EditInventoryForm
                             selectedItem={row}
                             getInventory={getInventory}
                             rows={inventoryList}

@@ -199,6 +199,7 @@ function DoctorHome() {
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell
                             align="center"
+                            className="cursor-pointer hover:shadow-md underline decoration-orange-500"
                             onClick={() =>
                               handleDoctorPatient(data.patient._id, data.patient.name, data.session)
                             }>
