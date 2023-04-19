@@ -107,6 +107,9 @@ export const getSessionPrescriptions = (sessionId) => {
 export const addNewTest = (data) => {
   return httpService.post(LabUrl + '/create', data);
 };
+export const addNewXray = (data) => {
+  return httpService.post(xray + '/create', data);
+};
 export const addLabTestResult = (data, labId) => {
   return httpService.patch(LabUrl + '/upload-result/' + labId, data);
 };
