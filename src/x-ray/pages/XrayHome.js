@@ -48,7 +48,7 @@ function XrayHome() {
             </Avatar>
             <p className="text-xs">X-ray staff</p>
           </div>
-          <h2 className="text-xl">Segun Miller </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper sx={{ width: '70vw' }} className="p-4">
@@ -68,8 +68,7 @@ function XrayHome() {
                     <li key={key}>
                       <Link
                         to={`/xray-tests/${patientId}/${sessionId}`}
-                        style={{ textDecoration: 'none' }}
-                      >
+                        style={{ textDecoration: 'none' }}>
                         {patient.name}
                       </Link>
                     </li>

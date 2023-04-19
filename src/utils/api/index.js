@@ -16,6 +16,7 @@ const SymptomsUrl = '/symptom';
 const patientSymptom = '/symptoms';
 const ApprovePaymentUrl = '/approve';
 const cashier = '/cashier';
+const xray = '/xray';
 
 export const addNewStaff = (data) => {
   return httpService.post(StaffUrl, data);
@@ -195,6 +196,9 @@ export const getApprovedPayments = () => {
 };
 export const getPendingLab = () => {
   return httpService.get(LabUrl + '/pending-test');
+};
+export const getPendingXray = () => {
+  return httpService.get(xray + '/pending-test');
 };
 export const getPendingTest = (patientId) => {
   return httpService.get(LabUrl + '/pending-test/' + patientId);
