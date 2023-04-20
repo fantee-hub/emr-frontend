@@ -38,6 +38,7 @@ function PatientInvoice() {
   const { sessionId, patientId } = useParams();
   const [prescription, setPrescription] = useState([]);
   const [tests, setTests] = useState([]);
+  const [xrays, setXrays] = useState([]);
 
   const classes = useStyles();
 
@@ -55,6 +56,15 @@ function PatientInvoice() {
     return (
       tests &&
       tests
+        .filter((item) => !item.paid)
+        .map((item) => item.test.price)
+        .reduce((prev, curr) => prev + curr, 0)
+    );
+  };
+  const calcTotoalXraysAmount = (xrays) => {
+    return (
+      xrays &&
+      xrays
         .filter((item) => !item.paid)
         .map((item) => item.test.price)
         .reduce((prev, curr) => prev + curr, 0)
@@ -99,13 +109,33 @@ function PatientInvoice() {
       console.log(error);
     }
   };
+
+  const getXraysInSession = async () => {
+    if (user) {
+      setAuthToken(user.token);
+    }
+    try {
+      const { data } = await getPendingPayments(patientId);
+      console.log(data);
+
+      if (data) {
+        setXrays(data.data.test.xrays);
+        calcTotoalXraysAmount(data.data.test.xrays);
+        console.log(data.data.test.xrays);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // console.log(tests[tests.length - 1].test._id);
   const grandTotalPrescription = calcTotalPrescriptionAmount(prescription);
   const grandTotalTests = calcTotalTestsAmount(tests);
+  const grandTotalXrays = calcTotoalXraysAmount(xrays);
 
   useEffect(() => {
     getPrescriptionsInSession();
     getTestsInSession();
+    getXraysInSession();
   }, []);
 
   return (
@@ -241,6 +271,61 @@ function PatientInvoice() {
                 types={tests && !tests.length ? tests : tests[tests.length - 1].test.type}
                 labId={tests && !tests.length ? tests : tests[tests.length - 1]._id}
                 labTests={tests && !tests.length ? tests : tests}
+              />
+            </div>
+          </Paper>
+
+          <Paper className="flex mt-4 flex-col items-center flex-1 px-3">
+            <h3>Xrays</h3>
+            <TableContainer component={Paper}>
+              <Table className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    {testHeaders.map((header, key) => {
+                      return (
+                        <TableCell key={key} align="center" className="bg-green-500">
+                          {header}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {xrays && !xrays.length ? (
+                    <tr>
+                      <td className="text-lg pl-3 mb-3 text-red-500">No xrays in this invoice. </td>
+                    </tr>
+                  ) : (
+                    xrays
+                      .filter((xray) => !xray.paid)
+                      .map((xray, index) => {
+                        const { name, price } = xray.test;
+                        return (
+                          <TableRow key={index}>
+                            <TableCell align="center">{index + 1}</TableCell>
+                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">
+                              {xray.description ? xray.description : ''}
+                            </TableCell>
+                            <TableCell align="center">{price}</TableCell>
+                          </TableRow>
+                        );
+                      })
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <p className="flex self-end text-lg font-bold">
+              Total:&nbsp; <span>&#8358;</span> {grandTotalXrays.toLocaleString()}
+            </p>
+            <div className="w-1/3 flex self-end">
+              <ApprovePayment
+                user={user}
+                amount={grandTotalXrays}
+                sessionId={sessionId}
+                patientId={patientId}
+                labId={xrays && !xrays.length ? xrays : xrays[tests.length - 1]._id}
+                labTests={xrays && !xrays.length ? xrays : xrays}
               />
             </div>
           </Paper>

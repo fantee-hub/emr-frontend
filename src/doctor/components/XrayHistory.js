@@ -19,7 +19,7 @@ function XrayHistory({ tests, isLoading }) {
     <div className="p-10">
       <div className="flex flex-row items-center">
         <FaBone style={{ marginRight: '1rem' }} />
-        <p className="text-xl font-bold text-wider">Xray Tests</p>
+        <p className="text-xl font-bold text-wider">Xrays</p>
       </div>
       <p className="font-semibold"> Date: {date}</p>
       <p className="font-semibold">Status: {sessionStatus}</p>
