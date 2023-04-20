@@ -115,7 +115,7 @@ function Inventory() {
     {
       name: 'type',
       id: 'type',
-      label: 'DRUG or TEST or XRAY'
+      label: 'DRUG or TEST or X-RAY'
     }
   ];
   return (
@@ -274,7 +274,7 @@ function Inventory() {
                 ) : (
                   inventoryList &&
                   inventoryList
-                    .filter((row) => row.type === 'xray')
+                    .filter((row) => row.type === 'x-ray')
                     .map((row, index) => (
                       <TableRow key={row.name} className="odd:bg-white even:bg-slate-50">
                         <TableCell align="center">{index + 1}</TableCell>

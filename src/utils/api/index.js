@@ -116,6 +116,9 @@ export const addLabTestResult = (data, labId) => {
 export const getSessionTests = (sessionId) => {
   return httpService.get(TestsInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
 };
+export const getSessionXrays = (sessionId) => {
+  return httpService.get(xray + '/session/' + sessionId);
+};
 
 export const getSessions = (page, size) => {
   return httpService.get(SessionUrl, { params: { page, size } });

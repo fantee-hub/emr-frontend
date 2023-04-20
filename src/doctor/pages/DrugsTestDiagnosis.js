@@ -34,7 +34,7 @@ function DrugsTestDiagnosis() {
       if (data) {
         const drugs = data?.data?.filter((item) => item.type === 'drug');
         const tests = data.data.filter((item) => item.type === 'test');
-        const xrays = data.data.filter((item) => item.type === 'xray');
+        const xrays = data.data.filter((item) => item.type === 'x-ray');
         console.log(drugs);
         setDrugsList(drugs);
         setTestsList(tests);
