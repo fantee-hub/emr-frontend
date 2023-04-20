@@ -209,6 +209,9 @@ export const getPendingXray = () => {
 export const getPendingTest = (patientId) => {
   return httpService.get(LabUrl + '/pending-test/' + patientId);
 };
+export const getAPendingXray = (patientId) => {
+  return httpService.get(xray + '/pending-test/' + patientId);
+};
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
 };

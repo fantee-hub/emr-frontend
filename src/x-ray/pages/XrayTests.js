@@ -15,7 +15,7 @@ import { CircularProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPaymentsForPatient } from '../../utils/api';
+import { getAPendingXray } from '../../utils/api';
 
 const useStyles = makeStyles({
   table: {
@@ -28,7 +28,7 @@ const headers = ['Index', 'Title', 'Description'];
 function XrayTests() {
   const classes = useStyles();
   const user = useCurrentUser();
-  const { patientId, sessionId } = useParams();
+  const { patientId } = useParams();
 
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +39,11 @@ function XrayTests() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPaymentsForPatient(patientId, sessionId);
+      const { data } = await getAPendingXray(patientId);
       setIsLoading(false);
       if (data) {
-        setRows(data);
-        console.log(data);
+        setRows(data.data);
+        console.log(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -66,7 +66,7 @@ function XrayTests() {
             </Avatar>
             <p className="text-xs">Xray staff</p>
           </div>
-          <h2 className="text-xl">{user.user.fullName} </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper className="flex flex-col items-center flex-1 px-3">
@@ -97,26 +97,28 @@ function XrayTests() {
                     </tbody>
                   ) : (
                     rows &&
-                    rows.tests &&
-                    rows.tests.map((test, index) => {
-                      const { title, description, id } = test;
-                      return (
-                        <TableBody key={id}>
-                          <Link
-                            className="hover:bg-slate-400"
-                            key={id}
-                            to={`/xray-results/${id}/${title}/${description}`}
-                            style={{ textDecoration: 'none' }}
-                          >
-                            <TableRow>
-                              <TableCell align="center">{index + 1}</TableCell>
-                              <TableCell align="center">{title}</TableCell>
-                              <TableCell align="center">{description}</TableCell>
-                            </TableRow>
-                          </Link>
-                        </TableBody>
-                      );
-                    })
+                    rows
+                      .filter((item) => item.paid)
+                      .map((item, index) => {
+                        const { name } = item.test;
+                        return (
+                          <TableBody key={item._id}>
+                            <Link
+                              className="hover:bg-slate-400"
+                              key={item._id}
+                              to={`/xray-results/${item._id}/${name}/${
+                                !item.description ? '-' : item.description
+                              }`}
+                              style={{ textDecoration: 'none' }}>
+                              <TableRow>
+                                <TableCell align="center">{index + 1}</TableCell>
+                                <TableCell align="center">{name}</TableCell>
+                                <TableCell align="center">{item.description}</TableCell>
+                              </TableRow>
+                            </Link>
+                          </TableBody>
+                        );
+                      })
                   )}
                 </Table>
               </TableContainer>

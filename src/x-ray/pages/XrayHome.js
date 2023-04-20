@@ -24,9 +24,10 @@ function XrayHome() {
     }
     try {
       const { data } = await getPendingXray();
+      console.log(data);
       setIsLoading(false);
       if (data) {
-        setPayments(data);
+        setPayments(data.data);
       }
     } catch (error) {
       setIsLoading(false);
