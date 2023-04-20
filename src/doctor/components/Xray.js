@@ -11,10 +11,10 @@ import { useCurrentUser } from '../../utils/hooks';
 // const drugs = JSON.parse(localStorage.getItem('drugsList'));
 // const user = JSON.parse(localStorage.getItem('user'));
 
-function LabTestForm({
+function XrayForm({
   test,
   handleChange,
-  inputData,
+
   setInputData,
   sessionId,
   patientId,
@@ -25,7 +25,7 @@ function LabTestForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  const { description } = inputData;
+  // const { description } = inputData;
 
   const getSelectedTestInfo = (title, list) => {
     return list.find((test) => test.name === title);
@@ -40,8 +40,8 @@ function LabTestForm({
     // const drugId = testInfo.id;
     const patient = patientId;
     const sessionID = sessionId;
-
-    const requestBody = { patient, sessionID, test: testInfo._id, description };
+    const doctor = user.data.staff_id;
+    const requestBody = { patient, sessionID, test: testInfo._id, doctor };
     console.log(requestBody);
     if (user) {
       setAuthToken(user.token);
@@ -76,7 +76,7 @@ function LabTestForm({
   );
 }
 
-function LabTest({ sessionId, testsList, patientId }) {
+function Xray({ sessionId, testsList, patientId }) {
   const [testChoice, setTestChoice] = useState([]);
   const [testInputData, setTestInputData] = useState({
     title: '',
@@ -115,9 +115,9 @@ function LabTest({ sessionId, testsList, patientId }) {
   return (
     <div className="mt-3 ring-2 ring-stone-300 p-4">
       <div className="flex justify-between">
-        <h3 className="text-lg mb-3">Tests</h3>
+        <h3 className="text-lg mb-3">Xrays</h3>
         <DropdownSearch
-          btnText="Add tests"
+          btnText="Add xrays"
           menuItems={testsList}
           handleCheckboxChange={handleTestChoice}
         />
@@ -129,7 +129,7 @@ function LabTest({ sessionId, testsList, patientId }) {
               testChoice.map((c, index) => {
                 return (
                   <>
-                    <LabTestForm
+                    <XrayForm
                       key={c}
                       test={c}
                       handleChange={handleTestFormChange}
@@ -154,4 +154,4 @@ function LabTest({ sessionId, testsList, patientId }) {
   );
 }
 
-export default LabTest;
+export default Xray;
