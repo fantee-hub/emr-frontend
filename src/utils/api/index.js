@@ -113,6 +113,9 @@ export const addNewXray = (data) => {
 export const addLabTestResult = (data, labId) => {
   return httpService.patch(LabUrl + '/upload-result/' + labId, data);
 };
+export const addXrayResult = (data, xrayId) => {
+  return httpService.patch(xray + '/upload-result/' + xrayId, data);
+};
 export const getSessionTests = (sessionId) => {
   return httpService.get(TestsInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
 };

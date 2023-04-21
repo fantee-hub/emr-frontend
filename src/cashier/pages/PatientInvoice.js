@@ -324,7 +324,6 @@ function PatientInvoice() {
                 amount={grandTotalXrays}
                 sessionId={sessionId}
                 patientId={patientId}
-                labId={xrays && !xrays.length ? xrays : xrays[tests.length - 1]._id}
                 labTests={xrays && !xrays.length ? xrays : xrays}
               />
             </div>

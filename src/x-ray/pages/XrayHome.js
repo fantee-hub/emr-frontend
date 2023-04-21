@@ -64,13 +64,13 @@ function XrayHome() {
               ) : (
                 payments &&
                 payments.map((payment, key) => {
-                  const { name, _id, sessionID } = payment;
+                  const { patient, session } = payment;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/xray-tests/${_id}/${sessionID}`}
+                        to={`/xray-tests/${patient._id}/${session}`}
                         style={{ textDecoration: 'none' }}>
-                        {name}
+                        {patient.name}
                       </Link>
                     </li>
                   );

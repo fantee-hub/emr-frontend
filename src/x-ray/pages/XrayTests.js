@@ -4,15 +4,15 @@ import { Person } from '@mui/icons-material';
 import { makeStyles } from '@material-ui/core/styles';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
+// import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { CircularProgress } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
 import { getAPendingXray } from '../../utils/api';
@@ -28,6 +28,7 @@ const headers = ['Index', 'Title', 'Description'];
 function XrayTests() {
   const classes = useStyles();
   const user = useCurrentUser();
+  const navigate = useNavigate();
   const { patientId } = useParams();
 
   const [rows, setRows] = useState([]);
@@ -35,12 +36,15 @@ function XrayTests() {
 
   const getPatientsApprovedInvoice = async () => {
     setIsLoading(true);
+
     if (user) {
       setAuthToken(user.token);
     }
     try {
       const { data } = await getAPendingXray(patientId);
+
       setIsLoading(false);
+
       if (data) {
         setRows(data.data);
         console.log(data.data);
@@ -51,10 +55,14 @@ function XrayTests() {
       toast.error('an error occured');
     }
   };
+  const handleRowClick = (id, title, description) => {
+    navigate(`/xray-results/${id}/${title}/${!description ? '-' : description}`);
+  };
   useEffect(() => {
     getPatientsApprovedInvoice();
   }, []);
 
+  console.log(rows);
   return (
     <>
       <div className="p-8">
@@ -102,30 +110,20 @@ function XrayTests() {
                       .map((item, index) => {
                         const { name } = item.test;
                         return (
-                          <TableBody key={item._id}>
-                            <Link
-                              className="hover:bg-slate-400"
-                              key={item._id}
-                              to={`/xray-results/${item._id}/${name}/${
-                                !item.description ? '-' : item.description
-                              }`}
-                              style={{ textDecoration: 'none' }}>
-                              <TableRow>
-                                <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{name}</TableCell>
-                                <TableCell align="center">{item.description}</TableCell>
-                              </TableRow>
-                            </Link>
-                          </TableBody>
+                          <TableRow
+                            key={index}
+                            className="cursor-pointer hover:bg-slate-200"
+                            onClick={() => handleRowClick(item._id, name, item.description)}>
+                            <TableCell align="center">{index + 1}</TableCell>
+                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">{item.description}</TableCell>
+                          </TableRow>
                         );
                       })
                   )}
                 </Table>
               </TableContainer>
             )}
-            <p className="flex self-end text-lg font-bold">
-              Grand Total:&nbsp; <span>&#8358;</span>
-            </p>
           </Paper>
         </section>
       </div>
