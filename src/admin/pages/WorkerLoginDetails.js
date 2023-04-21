@@ -64,7 +64,7 @@ function WorkerLoginDetails() {
   };
   const addStaff = async () => {
     setIsAddingStaff(true);
-    const staffFormData = { fullName, username, password, role };
+    const staffFormData = { fullName, username, password, role: role.toLowerCase() };
     console.log(staffFormData);
     if (user) {
       setAuthToken(user.token);

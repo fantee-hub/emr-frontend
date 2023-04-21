@@ -54,7 +54,7 @@ function Inventory() {
 
   const addInventory = async () => {
     setIsAddingInventory(true);
-    const inventoryFormData = { name, quantity, price, type };
+    const inventoryFormData = { name, quantity, price, type: type.toLowerCase() };
     if (user) {
       setAuthToken(user.token);
     }
