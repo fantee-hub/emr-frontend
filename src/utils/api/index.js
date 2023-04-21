@@ -16,6 +16,7 @@ const SymptomsUrl = '/symptom';
 const patientSymptom = '/symptoms';
 const ApprovePaymentUrl = '/approve';
 const cashier = '/cashier';
+const xray = '/xray';
 
 export const addNewStaff = (data) => {
   return httpService.post(StaffUrl, data);
@@ -106,11 +107,20 @@ export const getSessionPrescriptions = (sessionId) => {
 export const addNewTest = (data) => {
   return httpService.post(LabUrl + '/create', data);
 };
+export const addNewXray = (data) => {
+  return httpService.post(xray + '/create', data);
+};
 export const addLabTestResult = (data, labId) => {
   return httpService.patch(LabUrl + '/upload-result/' + labId, data);
 };
+export const addXrayResult = (data, xrayId) => {
+  return httpService.patch(xray + '/upload-result/' + xrayId, data);
+};
 export const getSessionTests = (sessionId) => {
   return httpService.get(TestsInSessionUrl + sessionId, { params: { page: 0, size: 10 } });
+};
+export const getSessionXrays = (sessionId) => {
+  return httpService.get(xray + '/session/' + sessionId);
 };
 
 export const getSessions = (page, size) => {
@@ -134,8 +144,14 @@ export const patientHistory = (session) => {
 export const getPatientResult = () => {
   return httpService.get(LabUrl + '/done-tests');
 };
+export const getPatientConcludedTest = () => {
+  return httpService.get(xray + '/done-tests');
+};
 export const concludeTest = (session) => {
   return httpService.patch(LabUrl + '/conclude-test', null, { params: { session } });
+};
+export const concludeXray = (session) => {
+  return httpService.patch(xray + '/conclude-test', null, { params: { session } });
 };
 export const awaitingDoctors = () => {
   return httpService.get(cashier + '/list');
@@ -196,8 +212,14 @@ export const getApprovedPayments = () => {
 export const getPendingLab = () => {
   return httpService.get(LabUrl + '/pending-test');
 };
+export const getPendingXray = () => {
+  return httpService.get(xray + '/pending-test');
+};
 export const getPendingTest = (patientId) => {
   return httpService.get(LabUrl + '/pending-test/' + patientId);
+};
+export const getAPendingXray = (patientId) => {
+  return httpService.get(xray + '/pending-test/' + patientId);
 };
 export const getApprovedPaymentsForPatient = (patientId, sessionId) => {
   return httpService.get(ApprovePaymentUrl + '/session/' + sessionId + '/' + patientId);
@@ -209,6 +231,9 @@ export const dispersePrescription = (prescriptionId) => {
 
 export const getDoctorPatient = (doctor) => {
   return httpService.get(cashier + '/doctor' + patient + '/list', { params: { doctor } });
+};
+export const deleteDoctorPaitent = (session) => {
+  return httpService.delete(sendQueueUrl + '/remove-patient', { params: { session } });
 };
 export const getPendingPayments = (patient) => {
   return httpService.get(cashier + '/pending', { params: { patient } });

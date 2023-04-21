@@ -17,7 +17,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import PatientsPersonalPage from './PatientsPersonalPage';
-import { getReceivedQueues, updateOnlineStatus, getPatientResult } from '../../utils/api';
+import {
+  getReceivedQueues,
+  updateOnlineStatus,
+  getPatientResult,
+  getPatientConcludedTest
+} from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import { useCurrentUser } from '../../utils/hooks';
 import DeleteDialog from '../components/DeleteDialog';
@@ -29,8 +34,9 @@ const useStyles = makeStyles({
   }
 });
 
-const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB'];
-const resultHeaders = ['Index', 'Test Result For', 'Conclude Test'];
+const headers = ['Index', 'Name', 'Email', 'Phone No', 'DOB', 'Delete'];
+const resultHeaders = ['Index', 'Lab Test Result For', 'Conclude Test'];
+const xrayHeaders = ['Index', 'Xray Test Result For', 'Conclude Test'];
 
 function DoctorHome() {
   const classes = useStyles();
@@ -46,6 +52,7 @@ function DoctorHome() {
     JSON.parse(localStorage.getItem('availableDoctors')) ?? []
   );
   const [patientLabTest, setPatientLabTest] = useState([]);
+  const [patientXrayTest, setPatientXrayTest] = useState([]);
   const filterData = (query, patientsList) => {
     let terms = query.split(' ');
     return patientsList.filter((object) =>
@@ -59,6 +66,9 @@ function DoctorHome() {
   const handlePatientNameClick = (id) => {
     navigate(`/history/${id}`);
   };
+  const handleDoctorPatient = (id, patient, session) => {
+    navigate(`/patient/${id}/${patient}/${session}`);
+  };
 
   const patientWithUploadedResults = async () => {
     try {
@@ -66,6 +76,18 @@ function DoctorHome() {
       console.log(data);
       if (data) {
         setPatientLabTest(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const patientWithConcludedXrays = async () => {
+    try {
+      const { data } = await getPatientConcludedTest();
+      console.log(data);
+      if (data) {
+        setPatientXrayTest(data.data);
       }
     } catch (error) {
       console.log(error);
@@ -127,9 +149,10 @@ function DoctorHome() {
 
   useEffect(() => {
     patientsFromReceptionist();
-  }, [patientLabTest]);
+  }, [patientLabTest, patientXrayTest]);
   useEffect(() => {
     patientWithUploadedResults();
+    patientWithConcludedXrays();
   }, []);
 
   return (
@@ -191,16 +214,28 @@ function DoctorHome() {
                       return (
                         <TableRow
                           key={index}
-                          component={Link}
-                          to={`/patient/${data.patient._id}/${data.patient.name}/${data.session}`}
                           style={{ textDecoration: 'none' }}
                           className="hover:shadow-md hover:bg-slate-50">
                           <TableCell align="center">{index + 1}</TableCell>
-
-                          <TableCell align="center">{data.patient.name}</TableCell>
+                          <TableCell
+                            align="center"
+                            className="cursor-pointer hover:shadow-md underline decoration-orange-500"
+                            onClick={() =>
+                              handleDoctorPatient(data.patient._id, data.patient.name, data.session)
+                            }>
+                            {data.patient.name}
+                          </TableCell>
                           <TableCell align="center">{data.patient.email}</TableCell>
                           <TableCell align="center">{data.patient.phoneNumber}</TableCell>
                           <TableCell align="center">{dob}</TableCell>
+                          <TableCell align="center">
+                            <DeleteDialog
+                              id={data.session}
+                              item={data.patient.name}
+                              getUpdatedList={() => patientsFromReceptionist()}
+                              deleteAction="doctorPatient"
+                            />
+                          </TableCell>
                         </TableRow>
                       );
                     })}
@@ -250,6 +285,59 @@ function DoctorHome() {
                               id={data.session}
                               item={data.name}
                               getUpdatedList={() => patientWithUploadedResults()}
+                              deleteAction="uploadedResult"
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+        ) : null}
+      </section>
+
+      <section className="flex flex-row justify-center items-center px-3">
+        {patientXrayTest ? (
+          <TableContainer component={Paper} style={{ width: '90vw' }}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {xrayHeaders.map((header, key) => {
+                    return (
+                      <TableCell key={key} align="center" className="bg-green-500">
+                        {header}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              {!patientXrayTest.length ? (
+                <h1 className="text-lg mb-3 text-red-500">Patient list is empty.</h1>
+              ) : (
+                <TableBody>
+                  {patientXrayTest &&
+                    patientXrayTest.map((data, index) => {
+                      return (
+                        <TableRow
+                          key={index}
+                          style={{ textDecoration: 'none' }}
+                          className="hover:shadow-md hover:bg-slate-50">
+                          <TableCell align="center">{index + 1}</TableCell>
+
+                          <TableCell
+                            align="center"
+                            onClick={() => handlePatientNameClick(data.session)}
+                            className="cursor-pointer hover:shadow-md underline decoration-orange-500">
+                            {data.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            <DeleteDialog
+                              id={data.session}
+                              item={data.name}
+                              getUpdatedList={() => patientWithConcludedXrays()}
+                              deleteAction="xrayResult"
                             />
                           </TableCell>
                         </TableRow>

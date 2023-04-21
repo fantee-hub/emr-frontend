@@ -6,7 +6,7 @@ import { Person } from '@mui/icons-material';
 import Paper from '@material-ui/core/Paper';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
-import { getApprovedPayments } from '../../utils/api';
+import { getPendingXray } from '../../utils/api';
 import { toast } from 'react-toastify';
 import { CircularProgress } from '@mui/material';
 
@@ -23,10 +23,11 @@ function XrayHome() {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await getApprovedPayments();
+      const { data } = await getPendingXray();
+      console.log(data);
       setIsLoading(false);
       if (data) {
-        setPayments(data);
+        setPayments(data.data);
       }
     } catch (error) {
       setIsLoading(false);
@@ -48,11 +49,11 @@ function XrayHome() {
             </Avatar>
             <p className="text-xs">X-ray staff</p>
           </div>
-          <h2 className="text-xl">Segun Miller </h2>
+          <h2 className="text-xl">{user.data.fullName} </h2>
         </div>
         <section>
           <Paper sx={{ width: '70vw' }} className="p-4">
-            <h3>Incoming approved payments</h3>
+            <h3>Incoming patients</h3>
             <ol>
               {isLoading ? (
                 <CircularProgress size={30} />
@@ -63,13 +64,12 @@ function XrayHome() {
               ) : (
                 payments &&
                 payments.map((payment, key) => {
-                  const { patientId, patient, sessionId } = payment;
+                  const { patient, session } = payment;
                   return (
                     <li key={key}>
                       <Link
-                        to={`/xray-tests/${patientId}/${sessionId}`}
-                        style={{ textDecoration: 'none' }}
-                      >
+                        to={`/xray-tests/${patient._id}/${session}`}
+                        style={{ textDecoration: 'none' }}>
                         {patient.name}
                       </Link>
                     </li>

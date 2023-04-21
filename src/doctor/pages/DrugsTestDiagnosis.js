@@ -8,6 +8,7 @@ import { getAllInventoryItems, getDiagnosisList, getSymptomsList } from '../../u
 import setAuthToken from '../../utils/setAuthToken';
 import Prescription from '../components/Prescription';
 import LabTest from '../components/LabTest';
+import Xray from '../components/Xray';
 import { useCurrentUser } from '../../utils/hooks';
 
 function DrugsTestDiagnosis() {
@@ -16,6 +17,7 @@ function DrugsTestDiagnosis() {
 
   const [drugsList, setDrugsList] = useState([]);
   const [testsList, setTestsList] = useState([]);
+  const [xrayList, setXrayList] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [symptomsList, setSymptomsList] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -32,9 +34,11 @@ function DrugsTestDiagnosis() {
       if (data) {
         const drugs = data?.data?.filter((item) => item.type === 'drug');
         const tests = data.data.filter((item) => item.type === 'test');
+        const xrays = data.data.filter((item) => item.type === 'x-ray');
         console.log(drugs);
         setDrugsList(drugs);
         setTestsList(tests);
+        setXrayList(xrays);
       }
     } catch (error) {
       toast.error(error.message);
@@ -102,6 +106,7 @@ function DrugsTestDiagnosis() {
               <section className="flex flex-col space-y-3">
                 <Prescription drugsList={drugsList} sessionId={sessionId} patientId={patientId} />
                 <LabTest testsList={testsList} sessionId={sessionId} patientId={patientId} />
+                <Xray testsList={xrayList} sessionId={sessionId} patientId={patientId} />
               </section>
             </Paper>
           </div>

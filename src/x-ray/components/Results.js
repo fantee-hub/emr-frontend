@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { useCurrentUser } from '../../utils/hooks';
 import setAuthToken from '../../utils/setAuthToken';
 import TestResultForm from '../../common-components/TestResultForm';
-import { addLabTestResult } from '../../utils/api';
+import { addXrayResult } from '../../utils/api';
 
 // eslint-disable-next-line react/prop-types
 function Results({ role, testId, title, description }) {
@@ -28,20 +28,26 @@ function Results({ role, testId, title, description }) {
   };
   // pass title and description as params in the submit function
 
-  const addTestResult = async () => {
+  const addTestResult = async (event) => {
+    event.preventDefault();
     setIsAddingTest(true);
     const id = testId;
-    const requestData = { id, title, description, result, resultDescription };
+    const requestData = {
+      result: {
+        result,
+        description: resultDescription
+      }
+    };
     if (user) {
       setAuthToken(user.token);
     }
     try {
-      const { data } = await addLabTestResult(requestData);
+      const { data } = await addXrayResult(requestData, id);
       setIsAddingTest(false);
       if (data) {
         toast.success('Result added successfully');
       }
-      navigate(`/${role}-tests/${testId}`);
+      navigate(`/${role}`);
     } catch (error) {
       setIsAddingTest(false);
       toast.error(error.message);

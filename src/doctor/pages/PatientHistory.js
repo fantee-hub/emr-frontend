@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Paper } from '@mui/material';
 import { toast } from 'react-toastify';
-import { getSessionPrescriptions, getSessionTests } from '../../utils/api';
+import { getSessionPrescriptions, getSessionTests, getSessionXrays } from '../../utils/api';
 import setAuthToken from '../../utils/setAuthToken';
 import PrescriptionHistory from '../components/PrescriptionHistory';
 import TestHistory from '../components/TestHistory';
+import XrayHistory from '../components/XrayHistory';
 import SymptomsHistory from '../components/SymptomsHistory';
 import DiagnosisHistory from '../components/DiagnosisHistory';
 
@@ -17,8 +18,10 @@ function PatientHistory() {
 
   const [isPrescritionLoading, setIsPrescriptionLoading] = useState(false);
   const [isTestLoading, setIsTestLoading] = useState(false);
+  const [isXrayLoading, setIsXrayLoading] = useState(false);
   const [prescription, setPrescription] = useState([]);
   const [tests, setTests] = useState([]);
+  const [xrays, setXrays] = useState([]);
 
   const getPrescriptionsInSession = async () => {
     setIsPrescriptionLoading(true);
@@ -52,10 +55,27 @@ function PatientHistory() {
       toast.error('an error occured');
     }
   };
+  const getXraysInSession = async () => {
+    setIsXrayLoading(true);
+    if (user) {
+      setAuthToken(user.token);
+    }
+    try {
+      const { data } = await getSessionXrays(sessionId);
+      console.log(data);
+      setIsXrayLoading(false);
+      if (data) {
+        setXrays(data.data);
+      }
+    } catch (error) {
+      toast.error('an error occured');
+    }
+  };
 
   useEffect(() => {
     getPrescriptionsInSession();
     getTestsInSession();
+    getXraysInSession();
   }, []);
 
   return (
@@ -67,6 +87,7 @@ function PatientHistory() {
           <DiagnosisHistory user={user} sessionId={sessionId} />
           <PrescriptionHistory isLoading={isPrescritionLoading} prescription={prescription} />
           <TestHistory isLoading={isTestLoading} tests={tests} />
+          <XrayHistory isLoading={isXrayLoading} tests={xrays} />
         </Paper>
       </div>
     </>

@@ -5,7 +5,7 @@ function XrayResults() {
   const { testId, testTitle, testDesc } = useParams();
   return (
     <div>
-      <Results role="Xray" testId={testId} title={testTitle} description={testDesc} />
+      <Results role="xray" testId={testId} title={testTitle} description={testDesc} />
     </div>
   );
 }
