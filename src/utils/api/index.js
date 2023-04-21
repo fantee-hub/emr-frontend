@@ -150,6 +150,9 @@ export const getPatientConcludedTest = () => {
 export const concludeTest = (session) => {
   return httpService.patch(LabUrl + '/conclude-test', null, { params: { session } });
 };
+export const concludeXray = (session) => {
+  return httpService.patch(xray + '/conclude-test', null, { params: { session } });
+};
 export const awaitingDoctors = () => {
   return httpService.get(cashier + '/list');
 };
