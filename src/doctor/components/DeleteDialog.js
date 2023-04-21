@@ -12,7 +12,7 @@ import { Delete } from '@mui/icons-material';
 import IntuitiveButton from '../../common-components/IntuitiveButton';
 
 import { DialogContent, DialogContentText } from '@material-ui/core';
-import { concludeTest, deleteDoctorPaitent } from '../../utils/api';
+import { concludeTest, deleteDoctorPaitent, concludeXray } from '../../utils/api';
 
 export default function DeleteDialog({ id, getUpdatedList, item, deleteAction }) {
   const [open, setOpen] = React.useState(false);
@@ -41,7 +41,11 @@ export default function DeleteDialog({ id, getUpdatedList, item, deleteAction })
 
     try {
       const { data } =
-        deleteAction === 'doctorPatient' ? await deleteDoctorPaitent(id) : await concludeTest(id);
+        deleteAction === 'doctorPatient'
+          ? await deleteDoctorPaitent(id)
+          : deleteAction === 'uploadedResult'
+          ? await concludeTest(id)
+          : await concludeXray(id);
       setIsLoading(false);
       setOpen(false);
       getUpdatedList();

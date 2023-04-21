@@ -337,7 +337,7 @@ function DoctorHome() {
                               id={data.session}
                               item={data.name}
                               getUpdatedList={() => patientWithConcludedXrays()}
-                              deleteAction="uploadedResult"
+                              deleteAction="xrayResult"
                             />
                           </TableCell>
                         </TableRow>
