@@ -14,7 +14,7 @@ import { useCurrentUser } from '../../utils/hooks';
 function XrayForm({
   test,
   handleChange,
-
+  inputData,
   setInputData,
   sessionId,
   patientId,
@@ -25,7 +25,7 @@ function XrayForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  // const { description } = inputData;
+  const { description } = inputData;
 
   const getSelectedTestInfo = (title, list) => {
     return list.find((test) => test.name === title);
@@ -41,7 +41,7 @@ function XrayForm({
     const patient = patientId;
     const sessionID = sessionId;
     const doctor = user.data.staff_id;
-    const requestBody = { patient, sessionID, test: testInfo._id, doctor };
+    const requestBody = { patient, sessionID, test: testInfo._id, doctor, description };
     console.log(requestBody);
     if (user) {
       setAuthToken(user.token);
