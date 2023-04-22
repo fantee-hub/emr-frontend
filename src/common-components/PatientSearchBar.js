@@ -16,9 +16,13 @@ function PatientSearchBar({ setSearchQuery, label }) {
       setSearchValue(event.target.value);
     }
   };
+  const submitForm = (e) => {
+    e.preventDefault();
+    setSearchQuery(searchValue);
+  };
   return (
     <div>
-      <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} onSubmit={submitForm}>
         <TextField
           id="search-bar"
           className="text"
