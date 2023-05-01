@@ -89,22 +89,6 @@ function ReceptionistHome() {
     }
   };
 
-  // const getAllDoctors = async () => {
-  //   const page = 0;
-  //   const size = 20;
-  //   if (user) {
-  //     setAuthToken(user.token);
-  //   }
-  //   try {
-  //     const { data } = await getAllStaff(page, size);
-  //     if (data) {
-  //       getAvailableDoctors(data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   useEffect(() => {
     // getAllDoctors();
     getOnline();
