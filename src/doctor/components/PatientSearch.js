@@ -49,7 +49,11 @@ function PatientSearchBar({ setSearchQuery, label }) {
 
   return (
     <div>
-      <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} onSubmit={submitForm}>
+      <Box
+        component="form"
+        sx={{ display: 'flex', flexDirection: 'column' }}
+        onSubmit={submitForm}
+        className="relative">
         <TextField
           id="search-bar"
           className="text"
@@ -68,13 +72,15 @@ function PatientSearchBar({ setSearchQuery, label }) {
           }}
         />
         {filteredData.length !== 0 && searchValue && (
-          <div className="data-result bg-[#F6F7FA] mt-[5px] shadow-lg shadow-[rgba(0,0,0,0.35) 0px  5px 15px] h-[200px] overflow-hidden overflow-y-auto">
+          <div className="data-result bg-[#F6F7FA] mt-[5px] shadow-lg shadow-[rgba(0,0,0,0.35) 0px  5px 15px] h-[200px] overflow-hidden overflow-y-auto absolute right-0 left-0 top-[50px]">
             {filteredData.map((value, key) => (
-              <div
-                className="w-full h-[50px] flex items-center hover:bg-[lightgrey] cursor-pointer"
-                key={key}>
-                <Link to={`/history/patient/${value.PID.split('/').join(' ')}`}>
-                  <p className="ml-[10px] ">{value.name}</p>
+              <div key={key}>
+                <Link
+                  to={`/history/patient/${value.PID.split('/').join(' ')}`}
+                  className="no-underline text-inherit">
+                  <div className="w-full h-[50px] flex items-center hover:bg-[lightgrey] cursor-pointer">
+                    <p className="ml-[10px] ">{value.name}</p>
+                  </div>
                 </Link>
               </div>
             ))}
