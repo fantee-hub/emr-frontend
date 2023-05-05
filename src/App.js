@@ -7,6 +7,7 @@ import DoctorHome from './doctor/pages/DoctorHome';
 import PatientsPersonalPage from './doctor/pages/PatientsPersonalPage';
 import DrugsTestDiagnosis from './doctor/pages/DrugsTestDiagnosis';
 import PatientHistory from './doctor/pages/PatientHistory';
+import History from './doctor/pages/History';
 import HistoryOverview from './doctor/pages/HistoryOverview';
 import CashierHome from './cashier/pages/CashierHome';
 import PatientInvoice from './cashier/pages/PatientInvoice';
@@ -73,6 +74,7 @@ function App() {
             />
             <Route path="/history-overview/:patientId" element={<HistoryOverview />} />
             <Route path="/history/:sessionId" element={<PatientHistory />} />
+            <Route path="/history/patient/:regId" element={<History />} />
           </Route>
 
           {/* cashier route */}

@@ -244,3 +244,7 @@ export const getPrescriptionBySession = (sessionId) => {
 export const getLabBySession = (sessionId) => {
   return httpService.get(LabUrl + '/session/' + sessionId);
 };
+
+export const patientHistoryWithPid = (patient) => {
+  return httpService.get('/history/pid', { params: { patient } });
+};
