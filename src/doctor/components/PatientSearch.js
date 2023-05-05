@@ -86,9 +86,6 @@ function PatientSearchBar({ setSearchQuery, label }) {
             ))}
           </div>
         )}
-        {/* <IconButton type="submit" aria-label="search">
-          <SearchIcon style={{ fill: 'blue' }} />
-        </IconButton> */}
       </Box>
     </div>
   );
