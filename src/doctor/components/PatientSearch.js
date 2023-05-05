@@ -6,12 +6,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import { InputAdornment } from '@material-ui/core';
 import { getAllPatients } from '../../utils/api';
+import { useCurrentUser } from '../../utils/hooks';
 import { Link } from 'react-router-dom';
+import setAuthToken from '../../utils/setAuthToken';
 
 function PatientSearchBar({ setSearchQuery, label }) {
   const [searchValue, setSearchValue] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const user = useCurrentUser();
 
   const handleChange = (event) => {
     const searchWord = event.target.value;
@@ -36,9 +39,16 @@ function PatientSearchBar({ setSearchQuery, label }) {
     setSearchQuery(searchValue);
   };
   const patientSearch = async () => {
-    const { data } = await getAllPatients();
-    if (data) {
-      setSuggestions(data.data);
+    if (user) {
+      setAuthToken(user.token);
+    }
+    try {
+      const { data } = await getAllPatients();
+      if (data) {
+        setSuggestions(data.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -72,7 +82,7 @@ function PatientSearchBar({ setSearchQuery, label }) {
           }}
         />
         {filteredData.length !== 0 && searchValue && (
-          <div className="data-result bg-[#F6F7FA] mt-[5px] shadow-lg shadow-[rgba(0,0,0,0.35) 0px  5px 15px] h-[200px] overflow-hidden overflow-y-auto absolute right-0 left-0 top-[50px]">
+          <div className="data-result bg-[#F6F7FA] mt-[5px] shadow-lg shadow-[rgba(0,0,0,0.35) 0px  5px 15px] h-[200px] overflow-hidden overflow-y-auto absolute right-0 left-0 top-[50px] z-999">
             {filteredData.map((value, key) => (
               <div key={key}>
                 <Link
