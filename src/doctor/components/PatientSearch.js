@@ -87,7 +87,9 @@ function PatientSearchBar({ setSearchQuery, label }) {
               <div key={key}>
                 <Link
                   // to={`/history/patient/${value.PID.split('/').join(' ')}`}
-                  to={`/patient-page/${value.patient_id}/${value.name}/oi`}
+                  to={`/patient-page/${value.patient_id}/${value.name}/${value.PID.split('/').join(
+                    ' '
+                  )}`}
                   className="no-underline text-inherit">
                   <div className="w-full h-[50px] flex items-center hover:bg-[lightgrey] cursor-pointer">
                     <p className="ml-[10px] ">{value.name}</p>

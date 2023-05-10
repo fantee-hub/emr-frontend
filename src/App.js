@@ -69,7 +69,7 @@ function App() {
           <Route element={<ProtectedRoutes allowedRole={DOCTOR_USER_ROLE} />}>
             <Route path="/doctor" element={<DoctorHome />} />
             <Route path="/patient/:patientId/:name/:sessionId" element={<PatientsPersonalPage />} />
-            <Route path="/patient-page/:patientId/:name/:sessionId" element={<PatientPage />} />
+            <Route path="/patient-page/:patientId/:name/:regId" element={<PatientPage />} />
             <Route
               path="/prescription/:patientId/:name/:sessionId"
               element={<DrugsTestDiagnosis />}

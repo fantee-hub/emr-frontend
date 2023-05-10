@@ -6,7 +6,7 @@ import { Icon } from '@material-ui/core';
 import NavTabs from '../../common-components/NavTabs';
 import PatientInfo from './PatientInfo';
 
-import HistoryOverview from './HistoryOverview';
+import HistoryDisplay from './HistoryDisplay';
 
 const TabPanel = (prop) => {
   const { children, current, index } = prop;
@@ -61,7 +61,7 @@ function PatientPage() {
         </TabPanel>
 
         <TabPanel current={currentTab} index={1}>
-          <HistoryOverview />
+          <HistoryDisplay />
         </TabPanel>
       </div>
     </div>
