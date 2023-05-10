@@ -5,6 +5,7 @@ import Login from './auth/Login';
 import ReceptionistHome from './receptionist/pages/ReceptionistHome';
 import DoctorHome from './doctor/pages/DoctorHome';
 import PatientsPersonalPage from './doctor/pages/PatientsPersonalPage';
+import PatientPage from './doctor/pages/PatientPage';
 import DrugsTestDiagnosis from './doctor/pages/DrugsTestDiagnosis';
 import PatientHistory from './doctor/pages/PatientHistory';
 import History from './doctor/pages/History';
@@ -68,6 +69,7 @@ function App() {
           <Route element={<ProtectedRoutes allowedRole={DOCTOR_USER_ROLE} />}>
             <Route path="/doctor" element={<DoctorHome />} />
             <Route path="/patient/:patientId/:name/:sessionId" element={<PatientsPersonalPage />} />
+            <Route path="/patient-page/:patientId/:name/:regId" element={<PatientPage />} />
             <Route
               path="/prescription/:patientId/:name/:sessionId"
               element={<DrugsTestDiagnosis />}
