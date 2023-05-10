@@ -39,7 +39,7 @@ function PrescriptionForm({ drug, handleChange, drugInputData, sessionId, patien
       setIsLoading(false);
       setIsSuccessful(true);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.response.data.message);
       setIsLoading(false);
       setIsSuccessful(false);
     }
